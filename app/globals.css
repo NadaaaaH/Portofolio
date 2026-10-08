@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Galada&family=JetBrains+Mono:wght@600;700;800&family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -12,15 +13,265 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Keep background always light/white for notebook pastel theme */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Poppins, Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+.font-galada {
+  font-family: 'Galada', cursive, sans-serif;
+}
+
+/* Text Stroke rules as requested: 7px stroke */
+.text-stroke-7 {
+  -webkit-text-stroke: 7px #ffffff;
+  paint-order: stroke fill;
+  filter: drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.08));
+}
+
+.text-stroke-5 {
+  -webkit-text-stroke: 5px #ffffff;
+  paint-order: stroke fill;
+  filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.06));
+}
+
+/* Colour tokens — override to re-skin the effect:
+   --ink    main text colour (defaults to currentColor)
+   --ink-2  primary accent   --ink-3  secondary accent */
+:root {
+  --ink: #5A4637;
+  --ink-2: #D4DEC8;
+  --ink-3: #D4DEC8;
+}
+
+/* 28 Hi-Liter — a marker pen paints across the word, then lifts off on scroll */
+.fx-marker {
+  font-family: 'Galada', cursive, sans-serif;
+  letter-spacing: .02em;
+  color: var(--ink);
+  padding: .02em .18em;
+  background: linear-gradient(100deg,
+      color-mix(in srgb, var(--ink-2) 85%, transparent),
+      color-mix(in srgb, var(--ink-2) 60%, transparent)) no-repeat 0 68%;
+  background-size: 0% 48%;
+  display: inline-block;
+  line-height: 1.05;
+}
+
+/* Section 1: Muncul saat load pertama kali sampai full */
+.fx-marker.is-marked {
+  animation: fx-marker-in 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Section 2: Pergi saat geser ke bawah */
+.fx-marker.is-gone {
+  animation: fx-marker-out 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes fx-marker-in {
+  0% {
+    background-size: 0% 48%;
+    background-position: 0 68%;
+  }
+
+  100% {
+    background-size: 100% 48%;
+    background-position: 0 68%;
+  }
+}
+
+@keyframes fx-marker-out {
+  0% {
+    background-size: 100% 48%;
+    background-position: 100% 68%;
+  }
+
+  100% {
+    background-size: 0% 48%;
+    background-position: 100% 68%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .fx-marker,
+  .fx-marker.is-marked,
+  .fx-marker.is-gone {
+    animation: none;
+    background-size: 100% 48%;
+  }
+}
+
+/* Gentle continuous idle wave per character when at rest */
+.wave-char {
+  display: inline-block;
+  will-change: transform;
+  animation: char-wave 2.2s ease-in-out infinite;
+}
+
+@keyframes char-wave {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3.5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-char {
+    animation: none;
+  }
+}
+
+/* Grid paper pattern matching the background paper in the user's mockup */
+.bg-grid-blue {
+  background-color: #f7fafc;
+  background-image:
+    linear-gradient(to right, rgba(120, 170, 210, 0.3) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120, 170, 210, 0.3) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Animations */
+@keyframes float-slow {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(4deg);
+  }
+}
+
+@keyframes float-reverse {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(8px) rotate(-4deg);
+  }
+}
+
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+.animate-float {
+  animation: float-slow 4s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-reverse 5s ease-in-out infinite 1.5s;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 15s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* SplitText masked line reveal styles */
+.split {
+  will-change: transform;
+}
+
+.split * {
+  will-change: transform;
+}
+
+.split-line {
+  display: block;
+  overflow: hidden;
+}
+
+/* ========================================================================= */
+/* 25 Ransom-Note Typography — mismatched cut-out letters shifting on the page */
+/* ========================================================================= */
+:root {
+  --ink: #5A4637;
+  --ink-2: #D4DEC8;
+  --ink-3: #2C3E35;
+}
+
+.fx-ransom {
+  font: 700 24px/1 "JetBrains Mono", monospace;
+  letter-spacing: 0;
+  display: inline-flex;
+  gap: 5px;
+  color: var(--ink);
+}
+
+.fx-ransom b {
+  font-weight: inherit;
+  display: grid;
+  place-items: center;
+  padding: 0.28em 0.32em;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ink) 14%, transparent);
+  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  will-change: transform, opacity;
+}
+
+.fx-ransom b.ransom-floating {
+  animation: fx-ransom 2.8s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.5s);
+}
+
+.fx-ransom b:nth-child(odd) {
+  background: var(--ink-2);
+  color: #2C3E35;
+}
+
+.fx-ransom b:nth-child(3n) {
+  background: #FAF4DD;
+  outline: 1.5px dashed color-mix(in srgb, var(--ink) 55%, transparent);
+  outline-offset: -1px;
+  color: var(--ink-3);
+}
+
+@keyframes fx-ransom {
+  0% {
+    transform: rotate(-6deg) translateY(1.5px);
+  }
+  100% {
+    transform: rotate(6deg) translateY(-1.5px);
+  }
 }

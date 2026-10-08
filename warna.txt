@@ -1,0 +1,136 @@
+================================================================================
+                      DATA PALET WARNA PROJECT PORTOFOLIO NADA
+================================================================================
+Tema Desain: Notebook Pastel, Scrapbook, Crafting & Cute Aesthetic
+Dihasilkan secara komprehensif dari seluruh komponen & styling proyek.
+
+--------------------------------------------------------------------------------
+1. WARNA UTAMA TEMA NOTEBOOK / SCRAPBOOK (CORE PALETTE)
+--------------------------------------------------------------------------------
+• #FAF4DD  : Butter Cream / Cream Manila
+             - Fungsi : Warna latar belakang kartu utama, notepad/kertas catatan,
+                        kontainer proyek, dan badge aktif navigasi.
+• #D4DEC8  : Sage Green Pastel
+             - Fungsi : Aksen warna utama frame, pill tombol navigasi, background
+                        action button, tag kategori, dan border frame foto profil.
+• #BCCAB4  : Soft Muted Sage / Stitch Green
+             - Fungsi : Garis tepi putus-putus (dashed border), aksen jahitan craft,
+                        outline tombol, dan pemisah elemen.
+• #2C3E35  : Deep Forest Pine Green
+             - Fungsi : Warna teks tombol utama, teks tab navigasi aktif, hover
+                        state tombol, dan outline dashed saat aktif/fokus.
+• #EBE3D5  : Soft Kraft / Warm Sand
+             - Fungsi : Watermark tipografi latar belakang berukuran besar ("NADA",
+                        "PORTFOLIO").
+• #F7FAFC  : Paper Canvas White-Grey
+             - Fungsi : Background kanvas dasar pola kertas bergaris kotak (grid).
+• #E4E9ED  : Metallic Binder Grey
+             - Fungsi : Lubang ring binder buku catatan (spiral notebook holes).
+• #FFFFFF  : Pure White
+             - Fungsi : Background global canvas, fill kartu stiker, text-stroke outline
+                        huruf judul, dan teks tombol dark state.
+
+--------------------------------------------------------------------------------
+2. WARNA TIPOGRAFI / TEKS (TYPOGRAPHY PALETTE)
+--------------------------------------------------------------------------------
+• #5A4637  : Warm Cocoa Brown
+             - Fungsi : Judul utama (heading h1, h2, h3), nama section, dan label tab.
+• #4A3E37  : Deep Mocha Brown
+             - Fungsi : Teks deskripsi utama, bio paragraf, isi konten, dan teks tag.
+• #6B5A4E  : Earthy Medium Brown
+             - Fungsi : Teks sekunder, deskripsi proyek/sertifikat, dan label subteks.
+• #8A7566  : Light Hazel Brown
+             - Fungsi : Catatan hak cipta footer dan teks pendukung berbobot halus.
+• #171717  : Neutral Black / Foreground Default
+             - Fungsi : Fallback teks foreground bawaan sistem.
+• #000000  : Pure Black (text-black)
+             - Fungsi : Teks status hover tautan & penanda penting.
+
+--------------------------------------------------------------------------------
+3. WARNA AKSEN STIKER, DOODLE & BADGE (CUTE ACCENTS)
+--------------------------------------------------------------------------------
+• #FFD166  : Pastel Sunglow Yellow
+             - Fungsi : Stiker SparkleStar, pin rating, highlight ornamen bintang.
+• #FFDD33  : Bright Sun Yellow
+             - Fungsi : Stiker bintang bercahaya (SparkleStar dekoratif).
+• #FFCC00  : Golden Daisy Center
+             - Fungsi : Titik tengah kelopak bunga daisy.
+• #FF9900  : Amber Daisy Border
+             - Fungsi : Garis lingkaran tengah bunga daisy.
+• #FFAA33  : Warm Tangerine Orange
+             - Fungsi : Stiker CuteStar aksen hangat.
+• #F59E0B  : Amber Dot Pattern
+             - Fungsi : Pola titik radial pada stiker washi tape kuning.
+• #D4AF37  : Metallic Gold
+             - Fungsi : Pin klip peniti stiker (decorative pin badge).
+• #FF7096  : Watermelon Pink
+             - Fungsi : Stiker HeartDoodle (ikon cinta/love) dan aksen cute.
+• #FF85A1  : Bubblegum Pink
+             - Fungsi : Stiker CuteStar pastel pink.
+• #FF85B3  : Sweet Blossom Pink
+             - Fungsi : Stiker SparkleStar varian merah muda.
+• #70D6FF  : Sky Breeze Blue
+             - Fungsi : Stiker CuteStar varian biru muda dan highlight skill visual.
+• #4CC9F0  : Cyan Sparkle Blue
+             - Fungsi : Stiker SparkleStar varian biru elektrik.
+• #39D39F  : Mint Emerald Green
+             - Fungsi : Stiker SparkleStar6 (bintang 6 sudut).
+• #9CAFAA  : Soft Sage Steel
+             - Fungsi : Ikon kontak email pada bilah aksi header.
+• #1A1A1A  : Doodle Ink Black
+             - Fungsi : Garis outline gambar tangan (pen sketch doodle stroke).
+• #F3E5D8  : Soft Beige Shadow
+             - Fungsi : Garis lipatan kelopak bunga daisy.
+• #0A66C2  : LinkedIn Corporate Blue
+             - Fungsi : Hover state tombol media sosial LinkedIn.
+• #EA4335  : Gmail Brand Red
+             - Fungsi : Hover state tombol kontak email (direct Gmail compose).
+
+--------------------------------------------------------------------------------
+4. PALET KHUSUS WASHI TAPE (RANDOM PASTEL TAPE COLORS)
+--------------------------------------------------------------------------------
+(Daftar warna acak yang dipakai untuk potongan selotip washi di komponen stiker)
+• #E47F98  : Soft Muted Dusty Rose
+• #E09B67  : Warm Muted Apricot
+• #D9B458  : Soft Vintage Honey
+• #6BB392  : Muted Soft Sage
+• #6A9EC0  : Soft Dusty Blue
+• #9B82BD  : Soft Muted Lavender
+• #C87D8F  : Soft Mauve
+
+--------------------------------------------------------------------------------
+5. WARNA TRANSPARANSI, SHADOW & EFEK (RGB / RGBA)
+--------------------------------------------------------------------------------
+• rgba(120, 170, 210, 0.3) : Grid Line Blue (garis kisi buku kotak-kotak pada latar belakang)
+• rgba(0, 0, 0, 0.08)       : Drop shadow lembut untuk text-stroke 7px
+• rgba(0, 0, 0, 0.06)       : Drop shadow lembut untuk text-stroke 5px
+• rgba(0, 0, 0, 0.09)       : Bayangan halus layer pertama pada kartu notebook
+• rgba(0, 0, 0, 0.04)       : Bayangan halus layer kedua pada kartu notebook
+• rgba(0, 0, 0, 0.20)       : Bayangan dalam (inset shadow) untuk efek lubang ring buku
+• rgba(0, 0, 0, 0.18)       : Drop shadow pada pin logam stiker
+
+--------------------------------------------------------------------------------
+6. KELAS WARNA TAILWIND CSS YANG DIGUNAKAN
+--------------------------------------------------------------------------------
+• Amber    : from-amber-100, to-amber-200, border-amber-200/50, border-amber-200/60,
+             border-amber-300, border-amber-300/70, bg-amber-100/80, from-amber-500
+• Rose     : from-rose-100, to-rose-200, border-rose-400/80, bg-rose-50/90,
+             text-rose-500, via-rose-500
+• Emerald  : from-emerald-100, to-emerald-200
+• Blue/Sky : from-blue-100, to-indigo-100, border-blue-200/60
+• Teal     : to-teal-100
+• Pink     : to-pink-100
+• Purple   : to-purple-600 (Instagram gradient hover)
+• Gray     : bg-gray-200, bg-gray-300, bg-gray-400, border-black/10
+• Neutral  : bg-white, bg-white/40, bg-white/80, bg-white/90, text-white,
+             text-black, outline-white
+
+--------------------------------------------------------------------------------
+7. REKAPITULASI SEMUA KODE HEX (RINGKASAN CEPAT)
+--------------------------------------------------------------------------------
+#0A66C2  #171717  #1A1A1A  #2C3E35  #39D39F  #4A3E37  #4CC9F0  #5A4637
+#6A9EC0  #6B5A4E  #6BB392  #70D6FF  #8A7566  #9B82BD  #9CAFAA  #BCCAB4
+#C87D8F  #D4AF37  #D4DEC8  #D9B458  #E09B67  #E47F98  #E4E9ED  #EBE3D5
+#F3E5D8  #F59E0B  #F7FAFC  #FAF4DD  #FFAA33  #FFCC00  #FFD166  #FFDD33
+#FF7096  #FF85A1  #FF85B3  #FF9900  #FFFFFF
+================================================================================
