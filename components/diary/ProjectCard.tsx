@@ -1,7 +1,7 @@
 "use client";
 import { ArrowUpRight, BookOpen, ImageIcon, Play, ExternalLink } from 'lucide-react';
-import { Tape, Pin, Sticker } from './Decorations';
-import { copy, type Language, type Project } from '@/app/data/portfolio';
+import { Tape, Pin, Sticker } from '@/components/decorations';
+import { copy, type Language, type Project } from '@/data/portfolio';
 
 function MissingMediaInline({ type, label }: { type: Project['type']; label: string }) {
   const Icon = type === 'video' ? Play : ImageIcon;
@@ -13,17 +13,19 @@ function MissingMediaInline({ type, label }: { type: Project['type']; label: str
   );
 }
 
+export interface ProjectCardProps {
+  project: Project;
+  language: Language;
+  onOpen: (p: Project) => void;
+  summary?: { title: string; description: string };
+}
+
 export function ProjectCard({
   project,
   language,
   onOpen,
   summary,
-}: {
-  project: Project;
-  language: Language;
-  onOpen: (p: Project) => void;
-  summary?: { title: string; description: string };
-}) {
+}: ProjectCardProps) {
   const t = copy[language];
   const writing = project.category === 'Writing';
   const creative = project.category === 'Creative Works';

@@ -2,7 +2,12 @@ export function ransomVariant(char: string, index: number, text: string): number
   return (char.charCodeAt(0) * 31 + index * 17 + text.length * 7) % 5;
 }
 
-export function RansomText({ text, className = '' }: { text: string; className?: string }) {
+export interface RansomTextProps {
+  text: string;
+  className?: string;
+}
+
+export function RansomText({ text, className = '' }: RansomTextProps) {
   let offset = 0;
   return (
     <span className={`ransom ${className}`} aria-label={text}>

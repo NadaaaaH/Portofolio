@@ -2,17 +2,19 @@
 
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ProjectFrame } from './ProjectFrame';
-import { copy, type Language, type Project } from '@/app/data/portfolio';
+import { copy, type Language, type Project } from '@/data/portfolio';
+
+export interface ProjectModalProps {
+  project: Project | null;
+  language: Language;
+  onClose: () => void;
+}
 
 export function ProjectModal({
   project,
   language,
   onClose,
-}: {
-  project: Project | null;
-  language: Language;
-  onClose: () => void;
-}) {
+}: ProjectModalProps) {
   return (
     <Dialog open={Boolean(project)} onOpenChange={open => { if (!open) onClose(); }}>
       {project && (

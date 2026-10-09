@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
 import { ExternalLink, ImageIcon, LoaderCircle, Monitor, Video } from 'lucide-react';
-import { copy, type Language, type Project } from '@/app/data/portfolio';
+import { copy, type Language, type Project } from '@/data/portfolio';
 
 export function youtubeEmbed(src: string): string | null {
   try {
