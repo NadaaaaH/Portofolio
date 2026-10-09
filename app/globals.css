@@ -74,7 +74,7 @@
 .language-button[aria-pressed=true] { background:var(--primary); color:var(--foreground); }
 .washi-marquee { background:var(--primary); background-image:repeating-linear-gradient(90deg,transparent 0 49px,color-mix(in oklab,var(--foreground) 8%,transparent) 50px 51px),var(--grain); transform:rotate(-1.6deg); padding:11px 0; margin:14px -5vw 0; width:calc(100% + 10vw); color:var(--foreground); border-block:1px dashed color-mix(in oklab,var(--foreground) 25%,transparent); overflow:hidden; }
 .marquee-track { display:flex; width:max-content; animation:marquee 45s linear infinite; font-weight:900; font-size:17px; gap:35px; }
-.hero { position:relative; padding:70px 0 55px; display:grid; grid-template-columns:1.35fr 1fr; gap:44px; align-items:center; }
+.hero { position:relative; padding:70px 0 55px; display:grid; grid-template-columns:auto auto; justify-content:center; gap:40px; align-items:center; }
 .hero-copy { position:relative; z-index:2; }
 .hello-label { font-family:var(--font-hand); color:var(--denim-ink); font-size:27px; margin:0 0 13px; transform:rotate(-5deg); display:inline-flex; align-items:center; gap:9px; }
 .ransom { display:flex; flex-wrap:wrap; align-items:center; gap:.13em; margin:0; font-weight:800; font-size:35px; line-height:1.4; }
