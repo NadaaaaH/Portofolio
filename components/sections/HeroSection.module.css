@@ -1,3 +1,9 @@
+.heroPinnedWrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
 .heroZone {
   position: relative;
   z-index: 1;

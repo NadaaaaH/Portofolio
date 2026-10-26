@@ -77,11 +77,7 @@ export default function Page() {
           if (isDesktopOrTablet && !reduceMotion && heroRef.current) {
             ScrollTrigger.create({
               trigger: heroRef.current,
-              start: () =>
-                heroRef.current &&
-                heroRef.current.getBoundingClientRect().bottom + window.scrollY > window.innerHeight
-                  ? 'bottom bottom'
-                  : 'top top',
+              start: 'top top',
               endTrigger: '#work',
               end: 'top top',
               pin: true,
@@ -121,12 +117,14 @@ export default function Page() {
 
   return (
     <div className="book">
-      <Navbar language={language} onLanguageChange={changeLanguage} />
-      <main>
-      <div ref={heroRef} className={`hero-zone ${heroStyles.heroZone}`}>
-        <MarqueeTape text={t.portfolio} />
-        <HeroSection language={language} />
+      <div ref={heroRef} className={heroStyles.heroPinnedWrapper}>
+        <Navbar language={language} onLanguageChange={changeLanguage} />
+        <div className="hero-zone">
+          <MarqueeTape text={t.portfolio} />
+          <HeroSection language={language} />
+        </div>
       </div>
+      <main>
       <WorkSection
         language={language}
         category={category}
