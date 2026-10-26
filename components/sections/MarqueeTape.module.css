@@ -1,0 +1,14 @@
+.washiMarqueeWave {
+  /* Durasi per siklus lintasan marquee — sesuaikan angka ini untuk mengatur kecepatan */
+  --marquee-duration: 60s;
+}
+
+.marqueeText {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeText {
+    animation: none;
+  }
+}

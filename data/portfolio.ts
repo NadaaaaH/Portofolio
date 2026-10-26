@@ -1,5 +1,17 @@
 export type Language = 'id' | 'en';
-export type Category = 'All' | 'Fullstack Developer' | 'UI/UX Design' | 'Creative Works' | 'Writing';
+export type Category = 'All' | 'Web Development' | 'UI/UX Design' | 'Creative Works' | 'Writing';
+export interface ProjectMedia {
+  type: 'image' | 'video';
+  publicId: string; // Gunakan publicId alih-alih URL utuh
+  posterPublicId?: string;
+  title?: { id: string; en: string } | string;
+  description?: { id: string; en: string } | string;
+  features?: { id: string[]; en: string[] } | string[];
+  techFlow?: { id: string; en: string } | string;
+}
+
+export type MediaItem = ProjectMedia;
+
 export interface Project {
   id: string;
   title: string;
@@ -10,19 +22,21 @@ export interface Project {
   type: 'website' | 'video' | 'image';
   src: string;
   links: { demo?: string; repo?: string };
-  image?: string;
+  imagePublicId?: string; // Menyimpan publicId gambar utama
   group?: string;
   label?: string;
   previewLabels: string[];
+  media?: MediaItem[];
 }
-export const categories: Category[] = ['All', 'Fullstack Developer', 'UI/UX Design', 'Creative Works', 'Writing'];
+export const categories: Category[] = ['All', 'Web Development', 'UI/UX Design', 'Creative Works', 'Writing'];
 export const cvUrl = 'https://google.com';
 export const copy = {
+  foto: 'IMG_2219',
   id: {
     portfolio: 'PORTOFOLIO',
     name: 'Nada Haifa Nurfadhilah',
-    tagline: 'Software Engineering Enthusiast | Merging Logic with Creativity.',
-    bio: 'Mahasiswa TRPL IPB University yang berpengalaman dalam membangun aplikasi web, mendesain antarmuka interaktif, dan mengolah data. Terbuka untuk peluang magang di bidang teknologi.',
+    tagline: 'Aspiring Full-Stack Developer | Software Engineering Student',
+    bio: 'Suka membuat website, dari tampilan sampai sistem di belakangnya, termasuk fitur berbasis AI. Saya senang mencoba teknologi baru dan terus belajar lewat proyek kuliah, lomba, dan komunitas. Saat ini saya mencari kesempatan magang di bidang web development.',
     cv: 'Lihat CV',
     work: 'Karyaku ...',
     open: 'Buka halaman diary',
@@ -41,8 +55,8 @@ export const copy = {
   en: {
     portfolio: 'PORTFOLIO',
     name: 'Nada Haifa Nurfadhilah',
-    tagline: 'Software Engineering Enthusiast | Merging Logic with Creativity.',
-    bio: 'A Software Engineering Technology student at IPB University experienced in building web applications, designing interactive interfaces, and processing data. Open to internship opportunities in the tech industry.',
+    tagline: 'Aspiring Full-Stack Developer | Software Engineering Student',
+    bio: 'Enjoys building digital solutions, from interfaces that are comfortable to use to the systems behind them, including AI-powered features. Likes trying new technologies and keep learning through course projects, competitions, and community work. Currently looking for an internship in software development.',
     cv: 'View CV',
     work: 'My Work ...',
     open: 'Open diary page',
@@ -65,25 +79,118 @@ const originalProjects: Project[] = [
     title: 'Interactive Notebook Portfolio Website',
     description: 'Platform web portofolio bertema notebookbinder interaktif yang dikembangkan menggunakan Next.js App Router, Tailwind CSS v4, GSAP Animations, dan Supabase backend. Dilengkapi fitur switcher multi-bahasa (ID/EN) dan animasi stiker interaktif.',
     stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Supabase'],
-    category: 'Fullstack Developer',
-    role: 'Fullstack Developer',
+    category: 'Web Development',
+    role: 'Web Developer',
     type: 'website',
-    src: 'https://portofolio-psi-amber.vercel.app',
+    src: 'https://tumbuhberbagi.duckdns.org/',
     links: { demo: 'https://google.com', repo: 'https://github.com' },
-    image: '/FotoProfil.png',
+    imagePublicId: 'Screenshot_2026-10-18_211137',
     previewLabels: ['Web Application Interface', 'Backend API & Database Flow'],
+    media: [
+      {
+        type: 'image',
+        publicId: 'Screenshot_2026-10-18_211137',
+        title: {
+          id: 'Tampilan Utama & Antarmuka Notebook',
+          en: 'Main Interface & Notebook UI',
+        },
+        description: {
+          id: 'Halaman beranda bergaya binder notebook interaktif dengan tata letak scrapbook yang responsif dan navigasi bagian yang mulus.',
+          en: 'Interactive notebook binder homepage featuring a responsive scrapbook layout and smooth section navigation.',
+        },
+        features: {
+          id: [
+            'Antarmuka scrapbook interaktif & responsif',
+            'Sistem tab navigasi proyek intuitif',
+            'Desain bersih dengan tipografi bergaya diary',
+          ],
+          en: [
+            'Interactive & responsive scrapbook interface',
+            'Intuitive project tab navigation system',
+            'Clean diary-styled typography and layout',
+          ],
+        },
+        techFlow: {
+          id: 'Next.js App Router & Tailwind CSS menangani rendering komponen dinamis dan styling responsif.',
+          en: 'Next.js App Router & Tailwind CSS handle dynamic component rendering and responsive styling.',
+        },
+      },
+      {
+        type: 'video',
+        publicId: 'dog',
+        title: {
+          id: 'Animasi Stiker & Interaktivitas Halus',
+          en: 'Sticker Animation & Smooth Interactivity',
+        },
+        description: {
+          id: 'Demonstrasi interaksi elemen visual seperti stiker dekoratif dan animasi transisi halaman yang berjalan pada 60 FPS.',
+          en: 'Visual interaction showcase featuring decorative stickers and page transition animations running at 60 FPS.',
+        },
+        features: {
+          id: [
+            'Interaktivitas visual dan micro-animations',
+            'Video pratinjau alur kerja aplikasi',
+            'Transisi ringan tanpa beban performa',
+          ],
+          en: [
+            'Visual interactivity and micro-animations',
+            'Application workflow video preview',
+            'Lightweight transitions with zero lag',
+          ],
+        },
+        techFlow: {
+          id: 'Animasi GPU-accelerated diatur dengan hook interaksi browser dan Cloudinary video streaming.',
+          en: 'GPU-accelerated animations orchestrated via browser interaction hooks and Cloudinary video streaming.',
+        },
+      },
+      {
+        type: 'image',
+        publicId: 'FotoProfil',
+        title: {
+          id: 'Integrasi Multi-Bahasa & Sistem Data',
+          en: 'Multi-Language & Data Integration',
+        },
+        description: {
+          id: 'Dukungan dwibahasa ID/EN terintegrasi yang dapat beralih secara instan tanpa reload, tersimpan di preferensi lokal.',
+          en: 'Integrated bilingual ID/EN support switching instantly without page reloads, persisted via local storage.',
+        },
+        features: {
+          id: [
+            'Peralihan bahasa ID/EN real-time',
+            'Penyimpanan preferensi pengguna otomatis',
+            'Struktur data modular untuk kemudahan update konten',
+          ],
+          en: [
+            'Real-time ID/EN language switcher',
+            'Automatic user preference persistence',
+            'Modular data structure for easy content updates',
+          ],
+        },
+        techFlow: {
+          id: 'State React sinkron dengan local storage dan kamus data portfolio terpusat.',
+          en: 'React state synchronized with local storage and centralized portfolio data dictionary.',
+        },
+      },
+    ],
   },
   {
     id: 'fullstack-2',
     title: 'E-Commerce Management & Analytics Dashboard',
     description: 'Aplikasi manajemen inventaris dan analitik penjualan real-time dengan visualisasi grafik interaktif, otentikasi peran pengguna, dan ekspor laporan PDF/Excel secara otomatis.',
     stack: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Chart.js'],
-    category: 'Fullstack Developer',
-    role: 'Fullstack Developer',
+    category: 'Web Development',
+    role: 'Web Developer',
     type: 'website',
     src: '',
     links: { demo: 'https://google.com', repo: 'https://github.com' },
+    imagePublicId: 'FotoProfil', // ganti dengan publicId asli di Cloudinary
     previewLabels: ['Web Application Interface', 'Backend API & Database Flow'],
+    media: [
+      { type: 'image', publicId: 'FotoProfil' }, // ganti dengan publicId asli
+      { type: 'image', publicId: 'FotoProfil' },
+      { type: 'image', publicId: 'FotoProfil' },
+      { type: 'video', publicId: 'dog' },         // ganti dengan publicId asli
+    ],
   },
   {
     id: 'uiux-1',
@@ -273,6 +380,7 @@ export const socialLinks = {
   linkedin: 'https://www.linkedin.com/in/nada-haifa-nurfadhilah-448759280',
   instagram: 'https://www.instagram.com/nadaanf/',
   email: 'https://mail.google.com/mail/?view=cm&fs=1&to=nadahaifanurfadhilah@gmail.com',
+  github: 'https://github.com/NadaaaaH'
 };
 export const summaries = {
   portfolio: { title: 'Website Portofolio', description: 'Platform portofolio interaktif berbasis Next.js dan Tailwind CSS dengan desain bertema notebookbinder yang ceria dan penuh animasi stiker interaktif.' },

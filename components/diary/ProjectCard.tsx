@@ -2,6 +2,7 @@
 import { ArrowUpRight, BookOpen, ImageIcon, Play, ExternalLink } from 'lucide-react';
 import { Tape, Pin, Sticker } from '@/components/decorations';
 import { copy, type Language, type Project } from '@/data/portfolio';
+import { CloudinaryImage } from '@/components/img/MediaImage';
 
 function MissingMediaInline({ type, label }: { type: Project['type']; label: string }) {
   const Icon = type === 'video' ? Play : ImageIcon;
@@ -39,15 +40,12 @@ export function ProjectCard({
         <Tape tone={writing ? 'peach' : creative ? 'denim' : 'green'} />
       )}
       <div className="project-preview">
-        {project.image || (project.type === 'image' && project.src) ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            className="portfolio-shot"
-            src={project.image || project.src}
+        {project.imagePublicId ? (
+          <CloudinaryImage
+            publicId={project.imagePublicId}
             alt={project.title}
-            loading="lazy"
             width={640}
-            height={400}
+            className="portfolio-shot"
           />
         ) : creative ? (
           <div className="photo-strip">

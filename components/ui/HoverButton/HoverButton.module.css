@@ -1,0 +1,47 @@
+﻿/* HoverButton — efek "lift" saat hover, kembalikan bentuk asli */
+
+.btn {
+  /* Semua transisi dalam satu deklarasi agar override transition-colors dari Tailwind */
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease !important;
+}
+
+/* Hover & focus keyboard: tombol terangkat + warna berubah */
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px color-mix(in oklab, var(--denim-ink) 22%, transparent);
+  background-color: var(--denim-ink);
+  color: var(--card);
+  border-color: var(--denim-ink);
+  outline: none;
+}
+
+/* Active: menekan ke bawah + mengecil sedikit */
+.btn:active {
+  transform: translateY(-1px) scale(0.96);
+}
+
+/* Reduced motion: matikan gerak, sisakan perubahan warna */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease,
+      border-color 0.25s ease !important;
+  }
+
+  .btn:hover,
+  .btn:focus-visible {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn:active {
+    transform: none;
+  }
+}

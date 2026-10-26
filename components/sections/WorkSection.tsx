@@ -4,6 +4,7 @@ import { ArrowUpRight, Paperclip } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProjectCard } from '@/components/diary/ProjectCard';
 import { SectionTitle } from '@/components/diary/SectionTitle';
+import styles from './WorkSection.module.css';
 import {
   categories,
   copy,
@@ -30,7 +31,7 @@ export function WorkSection({
 }: WorkSectionProps) {
   const t = copy[language];
 
-  const full = projects.filter(p => p.category === 'Fullstack Developer');
+  const webDev = projects.filter(p => p.category === 'Web Development');
   const ux = projects.filter(p => p.category === 'UI/UX Design');
   const creative = projects.filter(p => p.category === 'Creative Works');
   const writing = projects.filter(p => p.category === 'Writing');
@@ -46,8 +47,9 @@ export function WorkSection({
       : [category];
 
   return (
-    <section id="work" className="work-band">
-      <div className="page-inner">
+    <div className={styles.workWrapper}>
+      <section id="work" className={`work-band ${styles.workBand}`}>
+        <div className="page-inner">
         <SectionTitle text={t.work} page="01" note={t.collection} />
         <div className="filters" role="group" aria-label={language === 'id' ? 'Filter kategori project' : 'Project category filter'}>
           {categories.map(c => (
@@ -57,7 +59,7 @@ export function WorkSection({
               aria-pressed={category === c}
               onClick={() => onCategoryChange(c)}
             >
-              {c === 'Fullstack Developer' ? 'Fullstack' : c === 'UI/UX Design' ? 'UI/UX' : c}
+              {c === 'UI/UX Design' ? 'UI/UX' : c}
             </Button>
           ))}
         </div>
@@ -68,14 +70,14 @@ export function WorkSection({
           <>
             <div className="category-group">
               <h3 className="category-subtitle">
-                FullStack Developer{' '}
+                Web Development{' '}
                 <Paperclip size={22} className="inline-block" style={{ marginLeft: '8px' }} aria-hidden="true" />
               </h3>
               <div className="project-grid">
-                {full.map((p, i) => renderCard(p, i === 0 ? summaries.portfolio : undefined))}
+                {webDev.map((p, i) => renderCard(p, i === 0 ? summaries.portfolio : undefined))}
               </div>
               <div className="more-row">
-                <Button variant="link" onClick={() => onCategoryChange('Fullstack Developer')}>
+                <Button variant="link" onClick={() => onCategoryChange('Web Development')}>
                   {t.more}<ArrowUpRight />
                 </Button>
               </div>
@@ -131,5 +133,6 @@ export function WorkSection({
         )}
       </div>
     </section>
+  </div>
   );
 }

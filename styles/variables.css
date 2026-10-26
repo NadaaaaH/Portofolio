@@ -1,0 +1,18 @@
+﻿/*
+ * Hover animation design tokens
+ * Digunakan oleh HoverButton dan SocialIconLink
+ */
+:root {
+  /* Warna layer hover tombol CV */
+  --hover-cv-fill:       var(--primary);       /* lime/olive — sama dengan pita marquee */
+  --hover-cv-text:       var(--foreground);    /* teks kontras saat hover */
+
+  /* Warna layer hover ikon sosial (selang-seling) */
+  --hover-social-fill-a: var(--denim-ink);     /* biru tua */
+  --hover-social-fill-b: var(--primary);       /* lime/olive */
+  --hover-social-icon:   var(--card);          /* ikon jadi krem saat hover */
+
+  /* Durasi & easing animasi */
+  --hover-duration:      0.45s;
+  --hover-ease:          cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import { TornPaperEdge } from '@/components/decorations';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ProjectModal } from '@/components/diary/ProjectModal';
 import {
   Navbar,
@@ -13,13 +14,19 @@ import {
   CertificatesSection,
   Footer,
 } from '@/components/sections';
+import heroStyles from '@/components/sections/HeroSection.module.css';
 import { copy, type Category, type Language, type Project } from '@/data/portfolio';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function Page() {
   const [language, setLanguage] = useState<Language>('id');
   const [category, setCategory] = useState<Category>('All');
   const [selected, setSelected] = useState<Project | null>(null);
   const opener = useRef<HTMLElement | null>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
   const t = copy[language];
 
   useEffect(() => {
@@ -50,19 +57,82 @@ export default function Page() {
     setSelected(p);
   }
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      mm.add(
+        {
+          isDesktopOrTablet: '(min-width: 641px)',
+          reduceMotion: '(prefers-reduced-motion: reduce)',
+        },
+        (context) => {
+          const { isDesktopOrTablet, reduceMotion } = context.conditions as {
+            isDesktopOrTablet: boolean;
+            reduceMotion: boolean;
+          };
+
+          if (isDesktopOrTablet && !reduceMotion && heroRef.current) {
+            ScrollTrigger.create({
+              trigger: heroRef.current,
+              start: () =>
+                heroRef.current &&
+                heroRef.current.getBoundingClientRect().bottom + window.scrollY > window.innerHeight
+                  ? 'bottom bottom'
+                  : 'top top',
+              endTrigger: '#work',
+              end: 'top top',
+              pin: true,
+              pinSpacing: false,
+              invalidateOnRefresh: true,
+            });
+          }
+        }
+      );
+    });
+
+    if (document.fonts) {
+      document.fonts.ready.then(() => {
+        ScrollTrigger.refresh();
+      });
+    }
+
+    const handleLoad = () => {
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('load', handleLoad);
+
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 600);
+
+    return () => {
+      window.removeEventListener('load', handleLoad);
+      clearTimeout(timer);
+      ctx.revert();
+    };
+  }, []);
+
+  useEffect(() => {
+    ScrollTrigger.refresh();
+  }, [category, language]);
+
   return (
     <div className="book">
       <Navbar language={language} onLanguageChange={changeLanguage} />
       <main>
+      <div ref={heroRef} className={`hero-zone ${heroStyles.heroZone}`}>
         <MarqueeTape text={t.portfolio} />
         <HeroSection language={language} />
-        <TornPaperEdge />
-        <WorkSection
-          language={language}
-          category={category}
-          onCategoryChange={setCategory}
-          onOpenProject={openProject}
-        />
+      </div>
+      <WorkSection
+        language={language}
+        category={category}
+        onCategoryChange={setCategory}
+        onOpenProject={openProject}
+      />
         <AchievementsSection />
         <SkillsSection />
         <CertificatesSection language={language} />

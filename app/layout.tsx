@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import "../styles/variables.css";
 import "./globals.css";
+
 
 export const metadata: Metadata = {
   title: "Nada Haifa Nurfadhilah — Scrapbook Portfolio",

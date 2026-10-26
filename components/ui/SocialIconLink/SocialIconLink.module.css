@@ -1,0 +1,78 @@
+﻿/* SocialIconLink — ikon bundar dengan efek layer naik dari bawah */
+
+.link {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;   /* sama dengan size="icon" Button */
+  height: 2.25rem;
+  border-radius: 4px;
+  color: var(--denim-ink);
+  background: transparent;
+  cursor: pointer;
+  /* Hapus outline default, kita tangani sendiri */
+  outline: none;
+}
+
+/* Layer warna */
+.link::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  transition: height var(--hover-duration) var(--hover-ease);
+  z-index: 2;
+  border-radius: inherit;
+}
+
+.link:hover::before,
+.link:focus-visible::before {
+  height: 100%;
+}
+
+/* Warna layer — varian A (biru tua) */
+.varA::before {
+  background: var(--hover-social-fill-a);
+}
+
+/* Warna layer — varian B (lime) */
+.varB::before {
+  background: var(--hover-social-fill-b);
+}
+
+/* Ikon di atas layer */
+.icon {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  transition:
+    transform var(--hover-duration) var(--hover-ease),
+    color var(--hover-duration) var(--hover-ease);
+}
+
+.link:hover .icon,
+.link:focus-visible .icon {
+  transform: rotateY(360deg);
+  color: var(--hover-social-icon);
+}
+
+/* Focus ring keyboard-accessible */
+.link:focus-visible {
+  outline: 2px solid var(--denim-ink);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link::before {
+    transition: none;
+  }
+  .icon {
+    transition: none;
+    transform: none !important;
+  }
+}

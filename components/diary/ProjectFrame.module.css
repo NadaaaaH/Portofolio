@@ -1,0 +1,224 @@
+/* ─── Zig-Zag Photo Gallery Layout ─── */
+.zigzagContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2.75rem;
+  width: 100%;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.zigzagRow {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+/* Selang-seling di desktop:
+   Baris 1 & 3: Frame kiri, teks kanan
+   Baris 2: Frame kanan, teks kiri */
+.zigzagRow:nth-child(odd) {
+  flex-direction: row;
+}
+
+.zigzagRow:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+/* ── Kolom Frame Foto (Sama persis dengan frame preview utama di atas modal) ── */
+.photoCol {
+  flex: 0 0 auto;
+  max-width: 46%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photoFrame {
+  position: relative;
+  width: 100%;
+  min-height: 170px;
+  background: var(--card);
+  border: 7px solid var(--card);
+  box-shadow: var(--paper-shadow);
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  line-height: 0;
+  text-align: left;
+}
+
+.photoFrame:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 8px 16px oklch(0.28 0.035 80 / 18%), 0 2px 4px oklch(0.28 0.035 80 / 10%);
+}
+
+.photoFrame:focus-visible {
+  outline: 2px solid var(--denim-ink);
+  outline-offset: 3px;
+}
+
+.photoThumb {
+  width: 100%;
+  height: auto;
+  min-height: 160px;
+  display: block;
+  border: 0;
+  background: var(--secondary);
+}
+
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--secondary);
+  line-height: 0;
+}
+
+.playOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.playBadge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.78);
+  backdrop-filter: blur(4px);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.photoFrame:hover .playBadge {
+  transform: scale(1.08);
+  background: rgba(20, 20, 20, 0.9);
+}
+
+/* ── Kolom Teks Informasi Fitur ── */
+.textCol {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.featureBadge {
+  display: inline-flex;
+  align-items: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: color-mix(in oklab, var(--primary) 50%, #000);
+  background: color-mix(in oklab, var(--primary) 20%, transparent);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  width: fit-content;
+}
+
+.featureTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--foreground);
+  line-height: 1.35;
+  margin: 0;
+}
+
+.featureDescription {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: color-mix(in oklab, var(--foreground) 85%, transparent);
+  margin: 0;
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0.15rem 0 0 0;
+  padding-left: 1.15rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
+}
+
+.featureList li {
+  margin: 0;
+}
+
+.techFlowBox {
+  margin-top: 0.35rem;
+  padding: 0.65rem 0.85rem;
+  background: color-mix(in oklab, var(--foreground) 4%, transparent);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 6px 6px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.techFlowHeader {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: color-mix(in oklab, var(--foreground) 70%, transparent);
+}
+
+.techFlowText {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
+  margin: 0;
+}
+
+/* ── Responsif (Layar Kecil / Mobile) ── */
+@media (max-width: 768px) {
+  .zigzagContainer {
+    gap: 2rem;
+  }
+
+  /* Di layar kecil, tumpuk vertikal: frame selalu di atas, teks di bawah */
+  .zigzagRow,
+  .zigzagRow:nth-child(even),
+  .zigzagRow:nth-child(odd) {
+    flex-direction: column !important;
+    align-items: stretch;
+    gap: 1.1rem;
+  }
+
+  .photoCol {
+    width: 100% !important;
+    max-width: 100%;
+    flex: 0 0 auto;
+    justify-content: center;
+  }
+
+  .photoFrame {
+    border-width: 5px;
+    max-width: 100%;
+  }
+}
