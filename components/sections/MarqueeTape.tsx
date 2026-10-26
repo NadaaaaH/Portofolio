@@ -23,7 +23,6 @@ export interface MarqueeTapeProps {
 export function MarqueeTape({ text, count = 55 }: MarqueeTapeProps) {
   const uid = useId().replace(/:/g, "");
   const pathId = `wm-path-${uid}`;
-  const noiseId = `wm-noise-${uid}`;
   const textPathRef = useRef<SVGTextPathElement>(null);
   const rafRef = useRef<number>(0);
   const offsetRef = useRef(0);
@@ -178,34 +177,12 @@ export function MarqueeTape({ text, count = 55 }: MarqueeTapeProps) {
         className="wave-svg"
       >
         <defs>
-          {/* Tekstur kertas tipis — washi tape feel, opacity 6% */}
-          <filter
-            id={noiseId}
-            x="0%" y="0%" width="100%" height="100%"
-            colorInterpolationFilters="sRGB"
-          >
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.72 0.68"
-              numOctaves="4"
-              seed="3"
-              stitchTiles="stitch"
-              result="noise"
-            />
-            <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
-            <feComponentTransfer in="grayNoise" result="dimNoise">
-              <feFuncA type="linear" slope="0.06" />
-            </feComponentTransfer>
-            <feBlend in="SourceGraphic" in2="dimNoise" mode="multiply" result="blended" />
-            <feComposite in="blended" in2="SourceGraphic" operator="in" />
-          </filter>
-
           {/* Path untuk textPath */}
           <path id={pathId} d={midPath} fill="none" />
         </defs>
 
-        {/* ── Badan pita: flat, satu warna + noise tekstur tipis ── */}
-        <path d={pitaPath} fill="var(--primary)" filter={`url(#${noiseId})`} />
+        {/* ── Badan pita: flat, satu warna ── */}
+        <path d={pitaPath} fill="var(--primary)" />
 
         {/* Tepi dashed — simpel, seperti washi tape asli */}
         <path

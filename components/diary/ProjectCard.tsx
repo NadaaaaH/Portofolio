@@ -1,5 +1,5 @@
 "use client";
-import { ArrowUpRight, BookOpen, ImageIcon, Play, ExternalLink } from 'lucide-react';
+import { ArrowUpRight, ImageIcon, Play, ExternalLink } from 'lucide-react';
 import { Tape, Pin, Sticker } from '@/components/decorations';
 import { copy, type Language, type Project } from '@/data/portfolio';
 import { CloudinaryImage } from '@/components/img/MediaImage';
@@ -28,16 +28,15 @@ export function ProjectCard({
   summary,
 }: ProjectCardProps) {
   const t = copy[language];
-  const writing = project.category === 'Writing';
   const creative = project.category === 'Creative Works';
   return (
     <article
-      className={`project-card scroll-reveal ${writing ? 'notes-card' : 'polaroid'} ${creative ? 'creative-card' : ''}`}
+      className={`project-card scroll-reveal polaroid ${creative ? 'creative-card' : ''}`}
     >
       {project.id.endsWith('1') ? (
         <Pin />
       ) : (
-        <Tape tone={writing ? 'peach' : creative ? 'denim' : 'green'} />
+        <Tape tone={creative ? 'denim' : 'green'} />
       )}
       <div className="project-preview">
         {project.imagePublicId ? (
@@ -59,11 +58,6 @@ export function ProjectCard({
                 {label}
               </span>
             ))}
-          </div>
-        ) : writing ? (
-          <div className="media-missing">
-            <BookOpen aria-hidden="true" />
-            <span>{project.label}</span>
           </div>
         ) : (
           <MissingMediaInline type={project.type} label={project.previewLabels[0] || t.missing} />

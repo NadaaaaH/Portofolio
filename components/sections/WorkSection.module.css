@@ -5,6 +5,7 @@
   z-index: 10;
   margin-top: -14px;
   filter: var(--torn-shadow);
+  transform: translateZ(0);
 }
 
 .workBand {

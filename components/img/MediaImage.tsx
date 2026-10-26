@@ -8,13 +8,16 @@ interface CloudinaryImageProps {
     width?: number;
     className?: string;
     onError?: React.ReactEventHandler<HTMLImageElement>;
+    style?: React.CSSProperties;
+    loading?: 'lazy' | 'eager';
+    draggable?: boolean;
 }
 
 /**
  * Build Cloudinary URL langsung — paling reliable, tanpa SDK complexity.
  * Format: https://res.cloudinary.com/{cloud}/image/upload/f_auto,q_auto,w_{width}/{publicId}
  */
-function buildUrl(publicId: string, width?: number): string {
+export function buildUrl(publicId: string, width?: number): string {
     if (publicId.startsWith('http://') || publicId.startsWith('https://') || publicId.startsWith('/')) {
         return publicId;
     }
@@ -28,7 +31,10 @@ export const CloudinaryImage: React.FC<CloudinaryImageProps> = ({
     alt,
     width,
     className,
-    onError
+    onError,
+    style,
+    loading = 'lazy',
+    draggable = false
 }) => {
     if (!publicId) return null;
 
@@ -39,9 +45,11 @@ export const CloudinaryImage: React.FC<CloudinaryImageProps> = ({
             src={src}
             alt={alt || ''}
             className={className}
-            loading="lazy"
+            loading={loading}
             decoding="async"
             onError={onError}
+            style={style}
+            draggable={draggable}
         />
     );
 };

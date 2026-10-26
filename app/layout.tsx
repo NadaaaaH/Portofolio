@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Nada Haifa Nurfadhilah — Scrapbook Portfolio",
-  description: "Portofolio Nada Haifa Nurfadhilah: software engineering, UI/UX, creative works, dan writing. Merging Logic with Creativity.",
+  description: "Portofolio Nada Haifa Nurfadhilah: software engineering, UI/UX, dan creative works. Merging Logic with Creativity.",
   openGraph: {
     title: "Nada Haifa Nurfadhilah — Scrapbook Portfolio",
     description: "Kumpulan karya, pencapaian, dan cerita kreatif Nada Haifa Nurfadhilah. Software Engineering Enthusiast.",

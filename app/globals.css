@@ -65,9 +65,21 @@
   }
 
   html {
-    scroll-behavior: smooth;
     margin: 0;
     padding: 0;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    background-image: var(--grain);
+    opacity: 0.65;
+    z-index: 99;
+    transform: translateZ(0);
   }
 
   button,
@@ -91,7 +103,6 @@
   max-width: 100%;
   margin: 0;
   background: var(--background);
-  background-image: var(--grain);
   min-height: 100vh;
   overflow-x: clip;
   position: relative;
@@ -817,13 +828,36 @@
   width: 100%;
   background: var(--secondary);
   clip-path: polygon(0 55%, 2% 40%, 4% 70%, 6% 38%, 8% 64%, 10% 40%, 12% 68%, 15% 30%, 18% 60%, 21% 44%, 24% 75%, 27% 39%, 30% 65%, 33% 37%, 36% 71%, 39% 43%, 42% 62%, 45% 34%, 48% 75%, 51% 43%, 54% 65%, 57% 37%, 60% 72%, 63% 45%, 66% 66%, 69% 37%, 72% 70%, 75% 44%, 78% 61%, 81% 35%, 84% 69%, 87% 43%, 90% 63%, 93% 36%, 96% 72%, 98% 42%, 100% 60%, 100% 100%, 0 100%);
+  transform: translateZ(0);
 }
 
 .work-band {
   background: var(--secondary);
-  background-image: linear-gradient(color-mix(in oklab, var(--denim) 10%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--denim) 10%, transparent) 1px, transparent 1px), var(--grain);
-  background-size: 24px 24px, 24px 24px, 180px 180px;
+  background-image: linear-gradient(color-mix(in oklab, var(--denim) 10%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--denim) 10%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px;
   padding: 42px 0 60px;
+  transform: translateZ(0);
+}
+
+/* ── Scroll-reveal: elemen tampil smooth saat masuk viewport ── */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  will-change: opacity, transform;
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 .section-heading {
@@ -1145,7 +1179,6 @@
 
 .skills-band {
   background: var(--secondary);
-  background-image: var(--grain);
 }
 
 .skills-band .torn-edge {
@@ -1266,7 +1299,6 @@
   background: var(--primary);
   position: relative;
   padding: 44px 0 23px;
-  background-image: var(--grain);
 }
 
 .footer .torn-edge {
@@ -1310,7 +1342,6 @@
   overflow-y: auto;
   overflow-x: hidden;
   background: var(--card);
-  background-image: var(--grain);
   border-radius: 4px;
   padding: 32px;
 }

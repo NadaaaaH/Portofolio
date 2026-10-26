@@ -14,6 +14,7 @@ import {
   CertificatesSection,
   Footer,
 } from '@/components/sections';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import heroStyles from '@/components/sections/HeroSection.module.css';
 import { copy, type Category, type Language, type Project } from '@/data/portfolio';
 
@@ -137,6 +138,7 @@ export default function Page() {
       </main>
       <Footer />
       <ProjectModal project={selected} language={language} onClose={() => setSelected(null)} />
+      <ScrollReveal />
     </div>
   );
 }

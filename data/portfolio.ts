@@ -1,5 +1,5 @@
 export type Language = 'id' | 'en';
-export type Category = 'All' | 'Web Development' | 'UI/UX Design' | 'Creative Works' | 'Writing';
+export type Category = 'All' | 'Web Development' | 'UI/UX Design' | 'Creative Works';
 export interface ProjectMedia {
   type: 'image' | 'video';
   publicId: string; // Gunakan publicId alih-alih URL utuh
@@ -28,7 +28,7 @@ export interface Project {
   previewLabels: string[];
   media?: MediaItem[];
 }
-export const categories: Category[] = ['All', 'Web Development', 'UI/UX Design', 'Creative Works', 'Writing'];
+export const categories: Category[] = ['All', 'Web Development', 'UI/UX Design', 'Creative Works'];
 export const cvUrl = 'https://google.com';
 export const copy = {
   foto: 'IMG_2219',
@@ -217,62 +217,6 @@ const originalProjects: Project[] = [
     previewLabels: ['Desktop UI Wireframe & Prototype', 'Mobile UI Screens Showcase'],
   },
   {
-    id: 'writing-0',
-    title: 'Moonlit Full',
-    group: 'Fiction Writing',
-    label: 'Novel',
-    description: 'Sebuah novel fiksi naratif yang mengisahkan alur perjalanan karakter utama menemukan tempat terbaiknya di dunia. Penulisan berfokus pada emosi mendalam dan pembangunan suasana.\n\nNaskah ini telah dibaca ribuan pembaca dan mendapatkan respon hangat berkat konflik emosional yang relatable serta pemilihan diksi yang puitis.',
-    stack: [],
-    category: 'Writing',
-    role: 'Writer',
-    type: 'image',
-    src: '',
-    links: {},
-    previewLabels: ['Novel'],
-  },
-  {
-    id: 'writing-1',
-    title: 'You Changed Me (Skrip Drama Youtube)',
-    group: 'Fiction Writing',
-    label: 'Skrip Drama/film',
-    description: 'Naskah skenario serial web drama YouTube dengan dialog yang natural, ritme alur adegan yang dinamis, serta instruksi aksi kamera yang terstruktur rapi untuk tim produksi.',
-    stack: [],
-    category: 'Writing',
-    role: 'Writer',
-    type: 'image',
-    src: '',
-    links: {},
-    previewLabels: ['Skrip Drama/film'],
-  },
-  {
-    id: 'writing-2',
-    title: 'You Changed Me (Skrip Drama Youtube)',
-    group: 'Non-Fiction Writing',
-    label: 'Karya Tulis Ilmiah',
-    description: 'Penulisan makalah dan karya ilmiah berbasis metodologi penelitian empiris dengan tinjauan pustaka sistematis, analisis data presisi, serta penyusunan sitasi standar akademik.',
-    stack: [],
-    category: 'Writing',
-    role: 'Writer',
-    type: 'image',
-    src: '',
-    links: {},
-    previewLabels: ['Karya Tulis Ilmiah'],
-  },
-  {
-    id: 'writing-3',
-    title: 'Promotion',
-    group: 'Copy Writing - Social Media',
-    label: 'Promotion',
-    description: '',
-    stack: ['Notion', 'Google Docs'],
-    category: 'Writing',
-    role: 'Writer',
-    type: 'image',
-    src: '',
-    links: {},
-    previewLabels: ['Copy Ad 1', 'Copy Ad 2', 'Copy Ad 3'],
-  },
-  {
     id: 'creative-0',
     title: 'Cover Novel',
     group: 'Design Graphic',
@@ -370,11 +314,50 @@ export const skills = [
   { name: 'Node.js & Supabase', level: 'Intermediate', icon: '\ud83d\ude80' },
   { name: 'Copywriting & Content', level: 'Proficient', icon: '\ud83d\udcdd' },
 ];
-export const certificates = [
-  { id: 1, title: 'Sertifikat Competency FullStack Web Developer', issuer: 'Kemendikbudristek', year: '2025' },
-  { id: 2, title: 'UI/UX Specialization Certificate', issuer: 'Google Coursera', year: '2024' },
-  { id: 3, title: 'Motion Graphics & Digital Writing Masterclass', issuer: 'Adobe Academy', year: '2024' },
-  { id: 4, title: 'Frontend Engineering Excellence Certification', issuer: 'Meta Frontend Cert', year: '2025' },
+export interface Certificate {
+  id: number;
+  publicId: string;
+  title: string;
+  issuer: string;
+  year: string;
+}
+
+export const certificates: Certificate[] = [
+  {
+    id: 1,
+    publicId: 'c98222e6-4bfc-45da-b7ec-322caf4a1646',
+    title: 'Gemini Certified Student', // TODO: Isi judul sertifikat untuk publicId hash ini
+    issuer: 'Google for Student', // TODO: Isi penerbit sertifikat untuk publicId hash ini
+    year: '2025', // TODO: Sesuaikan tahun perolehan
+  },
+  {
+    id: 2,
+    publicId: 'Nada_H_Nurfadhilah-_Certificate_Attendance_Sefc_-_REVOU',
+    title: 'Certificate of Attendance - SEFC', // TODO: Sesuaikan judul bila perlu
+    issuer: 'RevoU', // TODO: Sesuaikan penerbit bila perlu
+    year: '2024', // TODO: Sesuaikan tahun perolehan
+  },
+  {
+    id: 3,
+    publicId: 'Nada_Haifa_Nurfadhilah_-_Certificate_of_BelajarCodingWebsiteUntukPemula_by_Mounev_Academy',
+    title: 'Belajar Coding Website Untuk Pemula', // TODO: Sesuaikan judul bila perlu
+    issuer: 'Mounev Academy', // TODO: Sesuaikan penerbit bila perlu
+    year: '2024', // TODO: Sesuaikan tahun perolehan
+  },
+  {
+    id: 4,
+    publicId: 'Sertifikat_AI_Engineer_Nada_Haifa_Nurfadhilah',
+    title: 'Sertifikat AI Engineer', // TODO: Sesuaikan judul bila perlu
+    issuer: 'AI Training Program', // TODO: Sesuaikan penerbit bila perlu
+    year: '2025', // TODO: Sesuaikan tahun perolehan
+  },
+  {
+    id: 5,
+    publicId: 'Completion_Certificate_for_Intro_to_UI_UX_2',
+    title: 'Completion Certificate for Intro to UI/UX', // TODO: Sesuaikan judul bila perlu
+    issuer: 'UI/UX Course', // TODO: Sesuaikan penerbit bila perlu
+    year: '2024', // TODO: Sesuaikan tahun perolehan
+  },
 ];
 export const socialLinks = {
   linkedin: 'https://www.linkedin.com/in/nada-haifa-nurfadhilah-448759280',
@@ -385,6 +368,4 @@ export const socialLinks = {
 export const summaries = {
   portfolio: { title: 'Website Portofolio', description: 'Platform portofolio interaktif berbasis Next.js dan Tailwind CSS dengan desain bertema notebookbinder yang ceria dan penuh animasi stiker interaktif.' },
   mentari: { title: 'Design Website Games For Kids', description: 'Desain antarmuka interaktif dan edukatif untuk anak-anak dengan warna-warna pastel yang menyenangkan dan alur navigasi yang ramah pengguna.' },
-  novel: { title: 'Novel - Moonlit Full', description: 'Kisah fiksi romantis tentang pencarian jati diri di bawah sinar bulan purnama.' },
-  script: { title: 'Skrip Drama / Film', description: 'Naskah skenario drama berdurasi pendek untuk produksi konten video YouTube.' },
 };

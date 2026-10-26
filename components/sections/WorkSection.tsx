@@ -34,7 +34,6 @@ export function WorkSection({
   const webDev = projects.filter(p => p.category === 'Web Development');
   const ux = projects.filter(p => p.category === 'UI/UX Design');
   const creative = projects.filter(p => p.category === 'Creative Works');
-  const writing = projects.filter(p => p.category === 'Writing');
 
   const renderCard = (p: Project, summary?: { title: string; description: string }) => (
     <ProjectCard key={p.id} project={p} language={language} onOpen={onOpenProject} summary={summary} />
@@ -42,7 +41,7 @@ export function WorkSection({
 
   const filtered = filterProjects(category);
   const groups =
-    category === 'Writing' || category === 'Creative Works'
+    category === 'Creative Works'
       ? [...new Set(filtered.map(p => p.group || category))]
       : [category];
 
@@ -103,17 +102,6 @@ export function WorkSection({
                   </div>
                   <div className="more-row">
                     <Button variant="link" onClick={() => onCategoryChange('Creative Works')}>
-                      {t.more}<ArrowUpRight />
-                    </Button>
-                  </div>
-                </div>
-                <div>
-                  <h4 className="category-subtitle">Writing</h4>
-                  <div className="project-grid other-project-grid">
-                    {writing.slice(0, 2).map((p, i) => renderCard(p, i === 0 ? summaries.novel : summaries.script))}
-                  </div>
-                  <div className="more-row">
-                    <Button variant="link" onClick={() => onCategoryChange('Writing')}>
                       {t.more}<ArrowUpRight />
                     </Button>
                   </div>

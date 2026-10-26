@@ -2,6 +2,8 @@
   position: relative;
   z-index: 1;
   width: 100%;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .heroZone {
