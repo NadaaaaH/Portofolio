@@ -1,28 +1,54 @@
 export type Language = 'id' | 'en';
 export type Category = 'All' | 'Web Development' | 'UI/UX Design' | 'Creative Works';
+
+export type MultilingualText = { id: string; en: string } | string;
+
+export function getTranslation(
+  text: MultilingualText | undefined | null,
+  lang: Language = 'id'
+): string {
+  if (!text) return '';
+  if (typeof text === 'string') return text;
+  return text[lang] || text.id || text.en || '';
+}
+
 export interface ProjectMedia {
   type: 'image' | 'video';
-  publicId: string; // Gunakan publicId alih-alih URL utuh
+  publicId?: string; // ID media di Cloudinary
+  src?: string; // Alternatif URL langsung atau publicId
   posterPublicId?: string;
-  title?: { id: string; en: string } | string;
-  description?: { id: string; en: string } | string;
-  features?: { id: string[]; en: string[] } | string[];
-  techFlow?: { id: string; en: string } | string;
+  /**
+   * Mode pemutaran video:
+   * - `autoplay: true`: Otomatis berputar (loop, muted, playsInline, tanpa kontrol & tanpa ikon play).
+   *   Hemat performa: otomatis play saat terlihat di viewport (IntersectionObserver) dan pause saat keluar layar.
+   * - `autoplay: false` (atau tidak diisi / default): Mode manual — menampilkan thumbnail/poster + ikon play modern,
+   *   video diputar setelah diklik.
+   */
+  autoplay?: boolean;
+  /** Keterangan singkat (1-2 kalimat) yang tampil di samping foto galeri */
+  caption?: { id: string; en: string } | string;
 }
 
 export type MediaItem = ProjectMedia;
 
+export interface ProjectPreview {
+  type: 'image' | 'video';
+  publicId: string;
+  posterPublicId?: string;
+  autoplay?: boolean;
+}
+
 export interface Project {
   id: string;
-  title: string;
-  description: string;
+  title: MultilingualText;
+  description: MultilingualText;
   stack: string[];
+  architecture?: string[]; // Opsional: baris "Arsitektur" di modal hanya tampil jika diisi
   category: Exclude<Category, 'All'>;
-  role: string | string[];
-  type: 'website' | 'video' | 'image';
-  src: string;
+  role: MultilingualText | string[];
+  preview?: ProjectPreview;
   links: { demo?: string; repo?: string };
-  imagePublicId?: string; // Menyimpan publicId gambar utama
+  imagePublicId?: string; // Menyimpan publicId gambar utama (opsional fallback)
   group?: string;
   label?: string;
   previewLabels: string[];
@@ -47,6 +73,8 @@ export const copy = {
     missing: 'Pratinjau belum tersedia',
     more: 'Lihat Lainnya...',
     role: 'Role',
+    techStack: 'Tech Stack',
+    architecture: 'Arsitektur',
     hello: 'Hai, aku Nada!',
     annotation: 'sedikit logika, banyak kreativitas \u2661',
     collection: 'a little collection of my work',
@@ -67,6 +95,8 @@ export const copy = {
     missing: 'Preview not available yet',
     more: 'Lihat Lainnya...',
     role: 'Role',
+    techStack: 'Tech Stack',
+    architecture: 'Architecture',
     hello: "Hi, I'm Nada!",
     annotation: 'a little logic, a lot of creativity \u2661',
     collection: 'a little collection of my work',
@@ -76,112 +106,70 @@ export const copy = {
 const originalProjects: Project[] = [
   {
     id: 'fullstack-1',
-    title: 'Interactive Notebook Portfolio Website',
-    description: 'Platform web portofolio bertema notebookbinder interaktif yang dikembangkan menggunakan Next.js App Router, Tailwind CSS v4, GSAP Animations, dan Supabase backend. Dilengkapi fitur switcher multi-bahasa (ID/EN) dan animasi stiker interaktif.',
-    stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Supabase'],
+    title: {
+      id: 'Tumbuh Berbagi: Platform Pembelajaran & Simulasi UTBK',
+      en: 'Tumbuh Berbagi: Learning Platform & UTBK Simulation',
+    },
+    description: {
+      id: 'Platform web portofolio bertema notebook binder interaktif yang dikembangkan menggunakan Next.js App Router, Tailwind CSS v4, GSAP Animations, dan Supabase backend.\n\nDilengkapi fitur switcher multi-bahasa (ID/EN) dan animasi stiker interaktif yang responsif.',
+      en: 'Developed as an academic project in partnership with Tumbuh Berbagi, this web platform streamlines the organization’s operations for UTBK exam preparation. Built as a Modern Monolithic SPA using Inertia.js, it integrates an organizational landing page with an interactive real-time mock test (TO) system, self-paced practice modules, and an Item Response Theory (IRT) scoring mechanism. Additionally, the system features centralized content management for organizing question banks, exam schedules, and organizational updates.\n\nIn this project, I independently designed the system architecture and developed both the frontend and backend using React, Laravel, and Inertia.js. I implemented role-based authentication, automated email verification via Brevo SMTP Relay, IRT scoring integration for scheduled mock exams, PostgreSQL database schema design hosted on NeonDB, and media storage integration via Cloudflare R2 (S3-Compatible). On the administrative end, I built analytical dashboards using Recharts, integrated rich text editors (Tiptap/Quill), and configured automated PDF performance reporting (DomPDF). Finally, I containerized the application using Docker (multi-stage build) and managed deployment on AWS with custom domain configurations.',
+    },
+    stack: ['Laravel', 'React', 'Tailwind CSS', 'PHP', 'TypeScript', 'PostgreSQL'],
+    architecture: ['AWS EC2', 'NeonDB', 'Cloudflare R2', 'Brevo'],
     category: 'Web Development',
     role: ['Fullstack Developer', 'System Analyst'],
-    type: 'website',
-    src: 'https://tumbuhberbagi.duckdns.org/',
-    links: { demo: 'https://google.com', repo: 'https://github.com' },
+    preview: {
+      type: 'image',
+      publicId: 'Screenshot_2026-10-18_211137',
+    },
+    links: { demo: 'https://tumbuhberbagi.duckdns.org/', repo: 'https://github.com' },
     imagePublicId: 'Screenshot_2026-10-18_211137',
     previewLabels: ['Web Application Interface', 'Backend API & Database Flow'],
     media: [
       {
         type: 'image',
         publicId: 'Screenshot_2026-10-18_211137',
-        title: {
-          id: 'Tampilan Utama & Antarmuka Notebook',
-          en: 'Main Interface & Notebook UI',
-        },
-        description: {
-          id: 'Halaman beranda bergaya binder notebook interaktif dengan tata letak scrapbook yang responsif dan navigasi bagian yang mulus.',
-          en: 'Interactive notebook binder homepage featuring a responsive scrapbook layout and smooth section navigation.',
-        },
-        features: {
-          id: [
-            'Antarmuka scrapbook interaktif & responsif',
-            'Sistem tab navigasi proyek intuitif',
-            'Desain bersih dengan tipografi bergaya diary',
-          ],
-          en: [
-            'Interactive & responsive scrapbook interface',
-            'Intuitive project tab navigation system',
-            'Clean diary-styled typography and layout',
-          ],
-        },
-        techFlow: {
-          id: 'Next.js App Router & Tailwind CSS menangani rendering komponen dinamis dan styling responsif.',
-          en: 'Next.js App Router & Tailwind CSS handle dynamic component rendering and responsive styling.',
+        caption: {
+          id: 'Halaman beranda bergaya binder notebook interaktif dengan tata letak scrapbook yang responsif dan navigasi bagian yang mulus.Menampilkan antarmuka siswa berbasis peran (role-based auth) yang dilengkapi alur verifikasi email otomatis saat pendaftaran awal untuk memastikan keamanan akun dan akses modul pembelajaran.',
+          en: 'Demonstrates the student interface featuring role-based authentication and automated email verification during onboarding for secure access to practice modules.',
         },
       },
       {
         type: 'video',
-        publicId: 'dog',
-        title: {
-          id: 'Animasi Stiker & Interaktivitas Halus',
-          en: 'Sticker Animation & Smooth Interactivity',
-        },
-        description: {
-          id: 'Demonstrasi interaksi elemen visual seperti stiker dekoratif dan animasi transisi halaman yang berjalan pada 60 FPS.',
-          en: 'Visual interaction showcase featuring decorative stickers and page transition animations running at 60 FPS.',
-        },
-        features: {
-          id: [
-            'Interaktivitas visual dan micro-animations',
-            'Video pratinjau alur kerja aplikasi',
-            'Transisi ringan tanpa beban performa',
-          ],
-          en: [
-            'Visual interactivity and micro-animations',
-            'Application workflow video preview',
-            'Lightweight transitions with zero lag',
-          ],
-        },
-        techFlow: {
-          id: 'Animasi GPU-accelerated diatur dengan hook interaksi browser dan Cloudinary video streaming.',
-          en: 'GPU-accelerated animations orchestrated via browser interaction hooks and Cloudinary video streaming.',
+        publicId: 'tumbuhberbagi-admin',
+        autoplay: true,
+        caption: {
+          id: 'Demonstrasi dashboard admin untuk mengelola bank soal, membuat jadwal ujian, dan menganalisis statistik tingkat kesulitan soal dengan visualisasi data Recharts. Dilengkapi WYSIWYG Rich Text Editor (Tiptap/Quill) serta fitur cetak/unduh laporan PDF hasil analisis secara otomatis.',
+          en: 'Highlights the admin dashboard for managing question banks, scheduling exams, and visualizing item statistics using Recharts. Features WYSIWYG rich text editing (Tiptap/Quill) and automated PDF report generation for student performance.',
         },
       },
       {
         type: 'image',
-        publicId: 'FotoProfil',
-        title: {
-          id: 'Integrasi Multi-Bahasa & Sistem Data',
-          en: 'Multi-Language & Data Integration',
-        },
-        description: {
-          id: 'Dukungan dwibahasa ID/EN terintegrasi yang dapat beralih secara instan tanpa reload, tersimpan di preferensi lokal.',
-          en: 'Integrated bilingual ID/EN support switching instantly without page reloads, persisted via local storage.',
-        },
-        features: {
-          id: [
-            'Peralihan bahasa ID/EN real-time',
-            'Penyimpanan preferensi pengguna otomatis',
-            'Struktur data modular untuk kemudahan update konten',
-          ],
-          en: [
-            'Real-time ID/EN language switcher',
-            'Automatic user preference persistence',
-            'Modular data structure for easy content updates',
-          ],
-        },
-        techFlow: {
-          id: 'State React sinkron dengan local storage dan kamus data portfolio terpusat.',
-          en: 'React state synchronized with local storage and centralized portfolio data dictionary.',
+        publicId: 'Screenshot_2026-10-23_223511',
+        caption: {
+          id: 'Tampilan sistem Tryout interaktif dengan penghitung waktu real-time, navigasi penanda ragu-ragu, serta fitur pause ujian yang dapat dikonfigurasi langsung oleh admin.',
+          en: 'Showcases the live UTBK exam simulator featuring real-time countdown timers, interactive bookmarking ("doubt" flag), and admin-configurable section pause functionality.',
         },
       },
     ],
   },
   {
     id: 'fullstack-2',
-    title: 'E-Commerce Management & Analytics Dashboard',
-    description: 'Aplikasi manajemen inventaris dan analitik penjualan real-time dengan visualisasi grafik interaktif, otentikasi peran pengguna, dan ekspor laporan PDF/Excel secara otomatis.',
+    title: {
+      id: 'E-Commerce Management & Analytics Dashboard',
+      en: 'E-Commerce Management & Analytics Dashboard',
+    },
+    description: {
+      id: 'Aplikasi manajemen inventaris dan analitik penjualan real-time dengan visualisasi grafik interaktif, otentikasi peran pengguna, dan ekspor laporan PDF/Excel secara otomatis.',
+      en: 'Real-time inventory management and sales analytics application with interactive chart visualizations, user role authentication, and automated PDF/Excel report exports.',
+    },
     stack: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Chart.js'],
     category: 'Web Development',
     role: 'Web Developer',
-    type: 'website',
-    src: '',
+    preview: {
+      type: 'image',
+      publicId: 'FotoProfil',
+    },
     links: { demo: 'https://google.com', repo: 'https://github.com' },
     imagePublicId: 'FotoProfil', // ganti dengan publicId asli di Cloudinary
     previewLabels: ['Web Application Interface', 'Backend API & Database Flow'],
@@ -194,25 +182,33 @@ const originalProjects: Project[] = [
   },
   {
     id: 'uiux-1',
-    title: 'Design Website Games For Kids Called Mentari',
-    description: 'Perancangan UI/UX game interaktif untuk anak-anak dengan pendekatan elemen visual bertema ramah anak, warna-warna lembut yang riang, serta pengujian kemudahan navigasi bagi usia dini.',
+    title: {
+      id: 'Design Website Games For Kids Called Mentari',
+      en: 'Design Website Games For Kids Called Mentari',
+    },
+    description: {
+      id: 'Perancangan UI/UX game interaktif untuk anak-anak dengan pendekatan elemen visual bertema ramah anak, warna-warna lembut yang riang, serta pengujian kemudahan navigasi bagi usia dini.',
+      en: 'Interactive UI/UX design for kids educational games featuring child-friendly visuals, soft cheerful colors, and early-age usability navigation testing.',
+    },
     stack: ['Figma', 'Canva', 'Adobe XD'],
     category: 'UI/UX Design',
     role: 'UI/UX Designer',
-    type: 'image',
-    src: '',
     links: { demo: 'https://figma.com' },
     previewLabels: ['Desktop UI Wireframe & Prototype', 'Mobile UI Screens Showcase'],
   },
   {
     id: 'uiux-2',
-    title: 'Design Mobile App E-Commerce Aesthetic',
-    description: 'Perancangan pengalaman pengguna (UX) dan antarmuka (UI) aplikasi seluler belanja online bertema estetika minimalis dengan alur pemesanan produk yang sangat cepat dan intuitif.',
+    title: {
+      id: 'Design Mobile App E-Commerce Aesthetic',
+      en: 'Design Mobile App E-Commerce Aesthetic',
+    },
+    description: {
+      id: 'Perancangan pengalaman pengguna (UX) dan antarmuka (UI) aplikasi seluler belanja online bertema estetika minimalis dengan alur pemesanan produk yang sangat cepat dan intuitif.',
+      en: 'UI/UX design for a minimalist aesthetic online shopping mobile application with an intuitive and swift product ordering flow.',
+    },
     stack: ['Figma', 'Protopie', 'Illustrator'],
     category: 'UI/UX Design',
     role: 'UI/UX Designer',
-    type: 'image',
-    src: '',
     links: { demo: 'https://figma.com' },
     previewLabels: ['Desktop UI Wireframe & Prototype', 'Mobile UI Screens Showcase'],
   },
@@ -283,8 +279,6 @@ const originalProjects: Project[] = [
     stack: ['Photoshop', 'Canva', 'Illustrator'],
     category: 'Creative Works',
     role: 'Graphic Designer',
-    type: 'image',
-    src: '',
     links: {},
     previewLabels: ['Cover 1', 'Cover 2', 'Cover 3'],
   },
@@ -296,8 +290,6 @@ const originalProjects: Project[] = [
     stack: ['Photoshop', 'Canva', 'Illustrator'],
     category: 'Creative Works',
     role: 'Graphic Designer',
-    type: 'image',
-    src: '',
     links: {},
     previewLabels: ['Branding 1', 'Branding 2', 'Branding 3'],
   },
@@ -309,8 +301,6 @@ const originalProjects: Project[] = [
     stack: ['Photoshop', 'Canva', 'Illustrator'],
     category: 'Creative Works',
     role: 'Graphic Designer',
-    type: 'image',
-    src: '',
     links: {},
     previewLabels: ['Thumbnail 1', 'Thumbnail 2', 'Thumbnail 3'],
   },
@@ -322,8 +312,6 @@ const originalProjects: Project[] = [
     stack: ['Premiere Pro', 'CapCut', 'After Effects'],
     category: 'Creative Works',
     role: 'Video & Motion',
-    type: 'video',
-    src: '',
     links: {},
     previewLabels: ['Video 1', 'Video 2', 'Video 3'],
   },
@@ -335,8 +323,6 @@ const originalProjects: Project[] = [
     stack: ['Premiere Pro', 'CapCut', 'After Effects'],
     category: 'Creative Works',
     role: 'Video & Motion',
-    type: 'video',
-    src: '',
     links: {},
     previewLabels: ['Promo Video 1', 'Promo Video 2', 'Promo Video 3'],
   },
@@ -348,8 +334,6 @@ const originalProjects: Project[] = [
     stack: ['Premiere Pro', 'CapCut', 'After Effects'],
     category: 'Creative Works',
     role: 'Video & Motion',
-    type: 'video',
-    src: '',
     links: {},
     previewLabels: ['Reels 1', 'Reels 2', 'Reels 3'],
   },

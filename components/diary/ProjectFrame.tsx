@@ -1,20 +1,35 @@
-"use client";
-
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal, flushSync } from 'react-dom';
+import gsap from 'gsap';
+import { Flip } from 'gsap/Flip';
 import {
-  ChevronLeft,
-  ChevronRight,
   ExternalLink,
   ImageIcon,
   LoaderCircle,
-  Monitor,
-  Play,
   Video,
   X,
 } from 'lucide-react';
-import { copy, type Language, type Project, type ProjectMedia } from '@/data/portfolio';
+import { copy, getTranslation, type Language, type Project, type ProjectMedia } from '@/data/portfolio';
 import { HoverButton } from '@/components/ui/HoverButton/HoverButton';
+import { CloudinaryImage } from '@/components/img/MediaImage';
+import { MediaVideo } from '@/components/img/MediaVideo';
 import styles from './ProjectFrame.module.css';
+
+/* ─── Modern Play Triangle Icon (Sudut membulat bersih tanpa background) ─── */
+function PlayTriangleIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <path
+        d="M8.5 5.3a1.5 1.5 0 0 1 2.27-1.3l9.8 6.7a1.5 1.5 0 0 1 0 2.58l-9.8 6.7a1.5 1.5 0 0 1-2.27-1.28V5.3z"
+        fill="#ffffff"
+      />
+    </svg>
+  );
+}
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(Flip);
+}
 
 /* ─── Cloudinary URL Builders ─── */
 const CLOUD_NAME = 'dblv5trjd';
@@ -30,25 +45,6 @@ function buildVideoPosterUrl(publicId: string): string {
   return `https://res.cloudinary.com/${CLOUD_NAME}/video/upload/f_auto,q_auto,so_0/${publicId}.jpg`;
 }
 
-/* ─── YouTube Embed Helper ─── */
-export function youtubeEmbed(src: string): string | null {
-  try {
-    const url = new URL(src);
-    const host = url.hostname.replace(/^www\./, '');
-    if (host !== 'youtube.com' && host !== 'youtu.be' && host !== 'm.youtube.com') return null;
-    const id =
-      host === 'youtu.be'
-        ? url.pathname.slice(1)
-        : url.searchParams.get('v') ||
-          url.pathname.match(/\/(?:embed|shorts)\/([^/]+)/)?.[1];
-    return id && /^[\w-]{11}$/.test(id)
-      ? `https://www.youtube-nocookie.com/embed/${id}`
-      : null;
-  } catch {
-    return null;
-  }
-}
-
 /* ─── Cloudinary Poster Helper ─── */
 export function getCloudinaryPoster(item: ProjectMedia): string {
   if (item.posterPublicId) return buildImageUrl(item.posterPublicId);
@@ -57,8 +53,8 @@ export function getCloudinaryPoster(item: ProjectMedia): string {
 }
 
 /* ─── Missing Media Placeholder ─── */
-export function MissingMedia({ type, label }: { type: Project['type']; label: string }) {
-  const Icon = type === 'website' ? Monitor : type === 'video' ? Video : ImageIcon;
+export function MissingMedia({ type, label }: { type?: 'image' | 'video'; label: string }) {
+  const Icon = type === 'video' ? Video : ImageIcon;
   return (
     <div className="media-missing">
       <Icon aria-hidden="true" />
@@ -86,58 +82,24 @@ function GitHubIcon({ size = 18 }: { size?: number }) {
   );
 }
 
-/* ─── Media Content Helper (Bilingual with Auto Fallback) ─── */
-function getMediaContent(item: ProjectMedia, index: number, language: Language = 'id') {
+/* ─── Media Caption Helper (Bilingual with Auto Fallback) ─── */
+function getMediaCaption(item: ProjectMedia, index: number, language: Language = 'id') {
   const isId = language === 'id';
 
-  const defaultPlaceholders = [
-    {
-      title: isId ? 'Antarmuka Utama & Interaksi Pengguna' : 'Main Interface & User Interaction',
-      description: isId
-        ? 'Tampilan antarmuka yang dirancang dengan tata letak bersih dan responsif, memudahkan pengguna dalam mengakses fitur utama dengan interaksi yang nyaman.'
-        : 'User interface designed with clean, responsive layouts, providing intuitive access to key features and smooth interactions.',
-      features: isId
-        ? ['Desain antarmuka responsif & ramah pengguna', 'Navigasi komponen interaktif', 'Akses fitur utama yang terorganisir']
-        : ['Responsive & user-friendly interface', 'Interactive component navigation', 'Well-organized feature access'],
-      techFlow: isId
-        ? 'Komponen frontend dirender secara dinamis dengan styling responsif dan manajemen state terpusat.'
-        : 'Frontend components rendered dynamically with responsive styling and centralized state management.',
-    },
-    {
-      title: isId ? 'Alur Data & Logika Sistem' : 'Data Workflow & System Logic',
-      description: isId
-        ? 'Pengelolaan alur data dan validasi sistem untuk memastikan pemrosesan informasi berjalan cepat, stabil, dan konsisten di setiap tahapan.'
-        : 'Data workflow management and system validation ensuring fast, stable, and consistent information processing across all steps.',
-      features: isId
-        ? ['Validasi data real-time', 'Penanganan status proses yang transparan', 'Arsitektur modular yang mudah dikembangkan']
-        : ['Real-time data validation', 'Transparent process status handling', 'Modular & maintainable architecture'],
-      techFlow: isId
-        ? 'Integrasi API dan penanganan event asinkron menghubungkan antarmuka dengan layer logika secara aman.'
-        : 'API integration and asynchronous event handling connect the UI layer with backend logic securely.',
-    },
-    {
-      title: isId ? 'Visualisasi & Manajemen Fitur' : 'Feature Management & Visualization',
-      description: isId
-        ? 'Penyajian visual dan kontrol pengaturan fitur yang komprehensif, memberikan visibilitas penuh terhadap proses kerja dan performa sistem.'
-        : 'Comprehensive visual presentation and feature control, providing full visibility into system workflow and performance.',
-      features: isId
-        ? ['Visualisasi status interaktif', 'Laporan ringkas yang mudah dipahami', 'Pengaturan preferensi yang fleksibel']
-        : ['Interactive status visualization', 'Clear and concise summary insights', 'Flexible user preferences control'],
-      techFlow: isId
-        ? 'Data divisualisasikan dengan komponen visual yang dioptimalkan untuk performa tinggi di berbagai peramban.'
-        : 'Data visualized via optimized visual components ensuring high performance across all modern browsers.',
-    },
-  ];
+  const defaultCaptions = isId
+    ? [
+        'Tampilan antarmuka dengan tata letak bersih dan responsif, memudahkan akses ke fitur utama.',
+        'Alur data dan validasi sistem yang memastikan informasi diproses dengan cepat dan stabil.',
+        'Penyajian visual dan pengaturan fitur yang memberi gambaran jelas tentang proses kerja sistem.',
+      ]
+    : [
+        'A clean, responsive interface that makes key features easy to reach.',
+        'Data workflow and system validation that keep information processing fast and stable.',
+        'Visual presentation and feature controls that give a clear view of how the system works.',
+      ];
 
-  const placeholder = defaultPlaceholders[index % defaultPlaceholders.length];
-
-  const title = (typeof item.title === 'object' ? item.title?.[language] : item.title) || placeholder.title;
-  const description = (typeof item.description === 'object' ? item.description?.[language] : item.description) || placeholder.description;
-  const rawFeatures = typeof item.features === 'object' && !Array.isArray(item.features) ? item.features?.[language] : item.features;
-  const features = rawFeatures && rawFeatures.length > 0 ? rawFeatures : placeholder.features;
-  const techFlow = (typeof item.techFlow === 'object' ? item.techFlow?.[language] : item.techFlow) || placeholder.techFlow;
-
-  return { title, description, features, techFlow };
+  const caption = typeof item.caption === 'object' ? item.caption?.[language] : item.caption;
+  return caption || defaultCaptions[index % defaultCaptions.length];
 }
 
 /* ─── Zig-Zag Kodak Film Gallery Component ─── */
@@ -145,14 +107,36 @@ interface FilmStripProps {
   items: ProjectMedia[];
   title: string;
   language?: Language;
-  onOpenLightbox: (index: number) => void;
 }
 
-function FilmStrip({ items, title, language = 'id', onOpenLightbox }: FilmStripProps) {
+function FilmStrip({ items, title, language = 'id' }: FilmStripProps) {
   // Batasi data galeri maksimal 3 baris
   const displayItems = items.slice(0, 3);
-  const isId = language === 'id';
   const [aspectRatios, setAspectRatios] = useState<Record<number, number>>({});
+  const [mounted, setMounted] = useState(false);
+  const [activeMedia, setActiveMedia] = useState<ProjectMedia | null>(null);
+  const [activeRatio, setActiveRatio] = useState<number>(1.4);
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  const [isModalVideoPlaying, setIsModalVideoPlaying] = useState(false);
+
+  const modalRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const modalContentRef = useRef<HTMLDivElement>(null);
+  const modalFrameRef = useRef<HTMLDivElement>(null);
+  const activeCardRef = useRef<HTMLElement | null>(null);
+  const isAnimatingRef = useRef(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReduced(mql.matches);
+    const handleMotionChange = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    mql.addEventListener('change', handleMotionChange);
+    return () => {
+      mql.removeEventListener('change', handleMotionChange);
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   const handleMediaLoad = (idx: number, width: number, height: number) => {
     if (width && height) {
@@ -161,60 +145,178 @@ function FilmStrip({ items, title, language = 'id', onOpenLightbox }: FilmStripP
     }
   };
 
+  // ── GSAP Flip Zoom Media (Animasi persis AchievementsSection) ──
+  const openMedia = useCallback(
+    (mediaItem: ProjectMedia, cardEl: HTMLElement) => {
+      if (isAnimatingRef.current || activeMedia) return;
+
+      activeCardRef.current = cardEl;
+      setIsModalVideoPlaying(Boolean(mediaItem.autoplay));
+
+      const imgEl = cardEl.querySelector('img');
+      const videoEl = cardEl.querySelector('video');
+      const mediaEl = imgEl || videoEl;
+
+      let ratio = 1.4;
+      if (imgEl && imgEl.naturalWidth && imgEl.naturalHeight) {
+        ratio = imgEl.naturalWidth / imgEl.naturalHeight;
+      } else if (videoEl && videoEl.videoWidth && videoEl.videoHeight) {
+        ratio = videoEl.videoWidth / videoEl.videoHeight;
+      } else if (mediaEl && mediaEl.clientWidth && mediaEl.clientHeight) {
+        ratio = mediaEl.clientWidth / mediaEl.clientHeight;
+      }
+      setActiveRatio(ratio);
+
+      if (prefersReduced) {
+        document.body.style.overflow = 'hidden';
+        setActiveMedia(mediaItem);
+        if (modalRef.current) gsap.set(modalRef.current, { autoAlpha: 1 });
+        if (overlayRef.current) gsap.set(overlayRef.current, { autoAlpha: 0.75 });
+        return;
+      }
+
+      isAnimatingRef.current = true;
+      document.body.style.overflow = 'hidden';
+
+      cardEl.style.transition = 'none';
+      cardEl.setAttribute('data-flip-id', 'gallery-media-zoom');
+
+      const state = Flip.getState(cardEl, { props: 'transform,boxShadow,borderRadius' });
+      cardEl.style.visibility = 'hidden';
+
+      flushSync(() => {
+        setActiveMedia(mediaItem);
+      });
+
+      if (modalRef.current) gsap.set(modalRef.current, { autoAlpha: 1 });
+      if (overlayRef.current) {
+        gsap.fromTo(
+          overlayRef.current,
+          { autoAlpha: 0 },
+          { autoAlpha: 0.75, duration: 0.35, ease: 'power1.inOut' }
+        );
+      }
+
+      const targetFrame = modalFrameRef.current;
+      if (targetFrame) {
+        targetFrame.setAttribute('data-flip-id', 'gallery-media-zoom');
+        targetFrame.style.transition = 'none';
+
+        Flip.from(state, {
+          targets: targetFrame,
+          duration: 0.7,
+          ease: 'power1.inOut',
+          onComplete: () => {
+            isAnimatingRef.current = false;
+            targetFrame.focus();
+          },
+        });
+      } else {
+        isAnimatingRef.current = false;
+      }
+    },
+    [activeMedia, prefersReduced]
+  );
+
+  const closeMedia = useCallback(() => {
+    if (isAnimatingRef.current || !activeMedia) return;
+
+    const origCard = activeCardRef.current;
+    const modalFrame = modalFrameRef.current;
+
+    if (modalFrame) {
+      const vid = modalFrame.querySelector('video');
+      if (vid) vid.pause();
+    }
+    setIsModalVideoPlaying(false);
+
+    if (prefersReduced || !origCard || !modalFrame) {
+      document.body.style.overflow = '';
+      if (modalRef.current) gsap.set(modalRef.current, { autoAlpha: 0 });
+      if (overlayRef.current) gsap.set(overlayRef.current, { autoAlpha: 0 });
+      if (origCard) {
+        origCard.style.visibility = 'visible';
+        origCard.style.transition = '';
+      }
+      setActiveMedia(null);
+      origCard?.focus();
+      return;
+    }
+
+    isAnimatingRef.current = true;
+
+    if (overlayRef.current) {
+      gsap.to(overlayRef.current, { autoAlpha: 0, duration: 0.35, ease: 'power1.inOut' });
+    }
+
+    Flip.fit(modalFrame, origCard, {
+      scale: true,
+      duration: 0.7,
+      ease: 'power1.inOut',
+      props: 'borderRadius,boxShadow',
+      onComplete: () => {
+        origCard.style.visibility = 'visible';
+        origCard.style.transition = '';
+        if (modalRef.current) gsap.set(modalRef.current, { autoAlpha: 0 });
+        document.body.style.overflow = '';
+        flushSync(() => {
+          setActiveMedia(null);
+        });
+        isAnimatingRef.current = false;
+        origCard.focus();
+      },
+    });
+  }, [activeMedia, prefersReduced]);
+
+  // Listener tombol Escape (capture phase agar tidak menutup modal dialog induk)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && activeMedia && !isAnimatingRef.current) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        closeMedia();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
+  }, [activeMedia, closeMedia]);
+
   return (
     <div className={styles.zigzagContainer} role="region" aria-label={`Galeri fitur: ${title}`}>
       {displayItems.map((item, idx) => {
         const frameNum = idx + 1;
         const poster = getCloudinaryPoster(item);
-        const content = getMediaContent(item, idx, language);
+        const caption = getMediaCaption(item, idx, language);
 
-        // Lebar frame adaptif: landscape ~330px (sekitar 44% modal), square ~255px, portrait ~220px
+        // Lebar frame di dalam kolom foto (~57% konten): landscape penuh, square & portrait
+        // dipersempit agar frame tetap mengikuti rasio asli tanpa menjadi terlalu tinggi
         const ratio = aspectRatios[idx];
         const frameWidth = ratio
           ? ratio < 0.85
-            ? '220px'
+            ? '62%'
             : ratio <= 1.15
-              ? '255px'
-              : '330px'
-          : '330px';
+              ? '80%'
+              : '100%'
+          : '100%';
 
         return (
           <div key={idx} className={styles.zigzagRow}>
-            {/* ── Kolom Frame Foto (Sama persis dengan frame preview utama di atas modal) ── */}
-            <div className={styles.photoCol} style={{ width: frameWidth }}>
-              <button
-                type="button"
-                className={styles.photoFrame}
-                onClick={() => onOpenLightbox(idx)}
-                aria-label={`Buka media ${frameNum} di lightbox`}
-              >
-                {item.type === 'video' ? (
-                  <div className={styles.videoWrapper}>
-                    {poster ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={poster}
-                        alt={`Video preview ${frameNum}`}
-                        loading="lazy"
-                        className={styles.photoThumb}
-                        onLoad={e => {
-                          const img = e.currentTarget;
-                          if (img.naturalWidth && img.naturalHeight) {
-                            handleMediaLoad(idx, img.naturalWidth, img.naturalHeight);
-                          }
-                        }}
-                        onError={e => {
-                          if (item.publicId === 'FotoProfil') {
-                            e.currentTarget.src = '/FotoProfil.png';
-                          }
-                        }}
-                      />
-                    ) : (
-                      <video
-                        src={item.publicId ? buildVideoUrl(item.publicId) : ''}
-                        preload="metadata"
-                        muted
-                        playsInline
+            {/* ── Kolom Frame Foto ── */}
+            <div className={styles.photoCol}>
+              <div className={styles.tiltWrap} style={{ width: frameWidth }}>
+                <button
+                  type="button"
+                  className={styles.photoFrame}
+                  onClick={e => openMedia(item, e.currentTarget)}
+                  aria-label={`Buka media ${frameNum}`}
+                >
+                  {item.type === 'video' ? (
+                    <div className={styles.videoWrapper}>
+                      <MediaVideo
+                        publicId={item.publicId}
+                        src={item.src}
+                        posterPublicId={item.posterPublicId}
+                        autoplay={item.autoplay}
                         className={styles.photoThumb}
                         onLoadedMetadata={e => {
                           const video = e.currentTarget;
@@ -223,328 +325,249 @@ function FilmStrip({ items, title, language = 'id', onOpenLightbox }: FilmStripP
                           }
                         }}
                       />
-                    )}
-                    <div className={styles.playOverlay} aria-hidden="true">
-                      <div className={styles.playBadge}>
-                        <Play size={20} fill="#ffffff" color="#ffffff" className="translate-x-0.5" />
-                      </div>
+                      {!item.autoplay && (
+                        <div className={styles.playOverlay} aria-hidden="true">
+                          <div className={styles.playTriangle}>
+                            <PlayTriangleIcon className={styles.playIconSvg} />
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={item.publicId ? buildImageUrl(item.publicId) : ''}
-                    alt={`Galeri item ${frameNum}`}
-                    loading="lazy"
-                    className={styles.photoThumb}
-                    onLoad={e => {
-                      const img = e.currentTarget;
-                      if (img.naturalWidth && img.naturalHeight) {
-                        handleMediaLoad(idx, img.naturalWidth, img.naturalHeight);
-                      }
-                    }}
-                    onError={e => {
-                      if (item.publicId === 'FotoProfil') {
-                        e.currentTarget.src = '/FotoProfil.png';
-                      }
-                    }}
-                  />
-                )}
-              </button>
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={item.publicId ? buildImageUrl(item.publicId) : ''}
+                      alt={`Galeri item ${frameNum}`}
+                      loading="lazy"
+                      className={styles.photoThumb}
+                      onLoad={e => {
+                        const img = e.currentTarget;
+                        if (img.naturalWidth && img.naturalHeight) {
+                          handleMediaLoad(idx, img.naturalWidth, img.naturalHeight);
+                        }
+                      }}
+                      onError={e => {
+                        if (item.publicId === 'FotoProfil') {
+                          e.currentTarget.src = '/FotoProfil.png';
+                        }
+                      }}
+                    />
+                  )}
+                </button>
+              </div>
             </div>
 
-            {/* ── Kolom Teks Informasi Fitur ── */}
+            {/* ── Kolom Teks: satu paragraf keterangan singkat ── */}
             <div className={styles.textCol}>
-              <span className={styles.featureBadge}>
-                {isId ? `Fitur ${frameNum}` : `Feature ${frameNum}`}
-              </span>
-
-              <h4 className={styles.featureTitle}>
-                {content.title}
-              </h4>
-
-              <p className={styles.featureDescription}>
-                {content.description}
-              </p>
-
-              {content.features && content.features.length > 0 && (
-                <ul className={styles.featureList}>
-                  {content.features.map((feat, fIdx) => (
-                    <li key={fIdx}>{feat}</li>
-                  ))}
-                </ul>
-              )}
-
-              {content.techFlow && (
-                <div className={styles.techFlowBox}>
-                  <div className={styles.techFlowHeader}>
-                    <span>{isId ? 'Teknologi & Cara Kerja' : 'Tech & How It Works'}</span>
-                  </div>
-                  <p className={styles.techFlowText}>
-                    {content.techFlow}
-                  </p>
-                </div>
-              )}
+              <p className={styles.caption}>{caption}</p>
             </div>
           </div>
         );
       })}
-    </div>
-  );
-}
 
-/* ─── Lightbox Modal Component ─── */
-interface LightboxProps {
-  items: ProjectMedia[];
-  initialIndex: number;
-  title: string;
-  onClose: () => void;
-}
-
-function Lightbox({ items, initialIndex, title, onClose }: LightboxProps) {
-  const [index, setIndex] = useState(initialIndex);
-  const overlayRef = useRef<HTMLDivElement>(null);
-
-  const prev = useCallback(() => {
-    setIndex(i => (i <= 0 ? items.length - 1 : i - 1));
-  }, [items.length]);
-
-  const next = useCallback(() => {
-    setIndex(i => (i >= items.length - 1 ? 0 : i + 1));
-  }, [items.length]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') prev();
-      if (e.key === 'ArrowRight') next();
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [onClose, prev, next]);
-
-  const current = items[index];
-  const poster = current ? getCloudinaryPoster(current) : '';
-
-  return (
-    <div
-      ref={overlayRef}
-      className="lightbox-overlay"
-      role="dialog"
-      aria-modal="true"
-      aria-label={`Galeri Lightbox: ${title}`}
-      onClick={e => {
-        if (e.target === overlayRef.current) onClose();
-      }}
-    >
-      {/* Close Button */}
-      <button
-        type="button"
-        className="lightbox-close-btn"
-        onClick={onClose}
-        aria-label="Tutup lightbox"
-      >
-        <X size={24} />
-      </button>
-
-      {/* Navigation Arrows */}
-      {items.length > 1 && (
-        <>
-          <button
-            type="button"
-            className="lightbox-nav-btn lightbox-nav-prev"
-            onClick={prev}
-            aria-label="Media sebelumnya"
+      {/* Modal Portal dengan Overlay dan Media GSAP Flip Zoom (Keluar dari batas dialog ke document.body) */}
+      {mounted &&
+        createPortal(
+          <div
+            ref={modalRef}
+            className={styles.fullscreenModal}
+            role="dialog"
+            aria-modal="true"
+            aria-label={activeMedia ? `Pratinjau media ${title}` : 'Pratinjau media'}
+            onClick={closeMedia}
           >
-            <ChevronLeft size={32} />
-          </button>
-          <button
-            type="button"
-            className="lightbox-nav-btn lightbox-nav-next"
-            onClick={next}
-            aria-label="Media berikutnya"
-          >
-            <ChevronRight size={32} />
-          </button>
-        </>
-      )}
-
-      {/* Main Media Display */}
-      <div className="lightbox-content-box">
-        {current.type === 'video' ? (
-          <video
-            key={current.publicId}
-            src={current.publicId ? buildVideoUrl(current.publicId) : ''}
-            poster={poster || undefined}
-            controls
-            autoPlay
-            playsInline
-            className="lightbox-active-media"
-          />
-        ) : (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={current.publicId ? buildImageUrl(current.publicId) : ''}
-            alt={`${title} — preview ${index + 1}`}
-            className="lightbox-active-media"
-            loading="lazy"
-          />
+            <div
+              ref={overlayRef}
+              className={styles.fullscreenOverlay}
+              aria-hidden="true"
+            />
+            <div ref={modalContentRef} className={styles.fullscreenContent}>
+              {activeMedia && (
+                <div
+                  ref={modalFrameRef}
+                  tabIndex={-1}
+                  className={styles.fullscreenFrame}
+                  style={{ ['--media-aspect-ratio' as string]: activeRatio }}
+                  onClick={e => e.stopPropagation()}
+                >
+                  <button
+                    type="button"
+                    className={styles.frameCloseBtn}
+                    onClick={closeMedia}
+                    aria-label="Tutup pratinjau"
+                  >
+                    <X size={18} strokeWidth={2.5} />
+                  </button>
+                  {activeMedia.type === 'video' ? (
+                    <div className={styles.fullscreenVideoWrapper}>
+                      <MediaVideo
+                        publicId={activeMedia.publicId}
+                        src={activeMedia.src}
+                        posterPublicId={activeMedia.posterPublicId}
+                        autoplay={activeMedia.autoplay}
+                        autoPlay={true}
+                        loop={activeMedia.autoplay}
+                        muted={activeMedia.autoplay ? true : false}
+                        controls={!activeMedia.autoplay}
+                        playsInline
+                        className={styles.fullscreenMedia}
+                        onClick={e => e.stopPropagation()}
+                        onPlay={() => setIsModalVideoPlaying(true)}
+                        onPause={() => setIsModalVideoPlaying(false)}
+                        onEnded={() => setIsModalVideoPlaying(false)}
+                      />
+                      {!activeMedia.autoplay && !isModalVideoPlaying && (
+                        <div className={styles.playOverlay} aria-hidden="true">
+                          <div className={styles.playTriangle}>
+                            <PlayTriangleIcon className={styles.playIconSvg} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={activeMedia.publicId ? buildImageUrl(activeMedia.publicId) : ''}
+                      alt="Pratinjau media galeri"
+                      className={styles.fullscreenMedia}
+                      draggable={false}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+          </div>,
+          document.body
         )}
-
-        {/* Counter Badge */}
-        {items.length > 1 && (
-          <div className="lightbox-counter" aria-live="polite">
-            <span>{index + 1}</span> / <span>{items.length}</span>
-          </div>
-        )}
-      </div>
     </div>
   );
 }
 
 /* ─── Main ProjectFrame Component ─── */
 export function ProjectFrame({
-  type,
-  src,
+  preview,
   title,
   role,
   description,
   stack,
+  architecture,
   links,
   imagePublicId,
   media,
   language = 'id',
 }: Omit<Project, 'id' | 'category' | 'previewLabels'> & { language?: Language }) {
   const t = copy[language];
-  const element = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const displayTitle = getTranslation(title, language);
+  const displayDesc = getTranslation(description, language);
+  const rawRoles = Array.isArray(role) ? role : [role];
+  const roles = rawRoles
+    .map(r => getTranslation(r as any, language).replace(/^Role:\s*/i, '').trim())
+    .filter(Boolean);
+
+  const activePreview = preview || (imagePublicId ? { type: 'image' as const, publicId: imagePublicId } : undefined);
+
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-
-  // Build full Cloudinary URL from publicId
-  const imageUrl = imagePublicId ? buildImageUrl(imagePublicId) : undefined;
-
-  const yt = type === 'video' ? youtubeEmbed(src) : null;
 
   useEffect(() => {
-    const node = element.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries.some(e => e.isIntersecting)) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '100px' }
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+    setLoaded(false);
+    setFailed(false);
+  }, [activePreview?.publicId]);
 
   // Primary URL for "Buka di tab baru" button
-  const externalUrl = links.demo || (type === 'website' && src ? src : undefined);
+  const externalUrl = links.demo;
   const repoUrl = links.repo;
 
   return (
     <div className="modal-details">
-      {/* ── Foto Utama (Main Media) ── */}
-      <div ref={element} className="frame-media">
-        {(!src && !imageUrl) ? (
-          <MissingMedia type={type} label={t.missing} />
-        ) : (type === 'image' || (type === 'website' && !visible)) && imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={imageUrl} alt={title} loading="lazy" onError={() => setFailed(true)} />
-        ) : type === 'image' ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={src} alt={title} loading="lazy" onError={() => setFailed(true)} />
-        ) : visible && (type === 'website' || yt) ? (
+      {/* ── Media Utama (Cloudinary Image / Video) ── */}
+      <div className="frame-media">
+        {!activePreview?.publicId || failed ? (
+          <div className={styles.mainPlaceholder}>
+            <ImageIcon size={38} aria-hidden="true" className={styles.placeholderIcon} />
+            <span>{t.missing}</span>
+          </div>
+        ) : (
           <>
-            <iframe
-              src={yt || src}
-              title={title}
-              tabIndex={-1}
-              loading="lazy"
-              allow={yt ? 'fullscreen; picture-in-picture' : undefined}
-              allowFullScreen={Boolean(yt)}
-              referrerPolicy="strict-origin-when-cross-origin"
-              onLoad={() => setLoaded(true)}
-              onError={() => setFailed(true)}
-            />
-            {!loaded && !failed && (
+            {activePreview.type === 'video' ? (
+              <MediaVideo
+                publicId={activePreview.publicId}
+                posterPublicId={activePreview.posterPublicId}
+                autoplay={activePreview.autoplay}
+                className={styles.mainMedia}
+                onLoadedMetadata={() => setLoaded(true)}
+                onError={() => setFailed(true)}
+              />
+            ) : (
+              <CloudinaryImage
+                publicId={activePreview.publicId}
+                alt={displayTitle}
+                width={1200}
+                className={styles.mainMedia}
+                onLoad={() => setLoaded(true)}
+                onError={() => setFailed(true)}
+              />
+            )}
+            {!loaded && (
               <div className="frame-skeleton" role="status" aria-label={t.loading}>
                 <LoaderCircle aria-hidden="true" />
               </div>
             )}
-            {/* Fallback: tampilkan screenshot Cloudinary jika iframe diblokir */}
-            {failed && imageUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={imageUrl} alt={title} loading="lazy" />
-            )}
           </>
-        ) : visible && type === 'video' ? (
-          <video
-            src={src}
-            poster={imageUrl}
-            controls
-            muted
-            playsInline
-            preload="metadata"
-            onError={() => setFailed(true)}
-          />
-        ) : (
-          <div className="frame-skeleton">
-            <LoaderCircle aria-hidden="true" />
-          </div>
         )}
-        {failed && !imageUrl && (
-          <div className="frame-skeleton">
-            <MissingMedia type={type} label={t.missing} />
+
+        {/* ── Overlay Tombol Link di Pojok Kanan Bawah Preview ── */}
+        {(externalUrl || repoUrl) && (
+          <div className={styles.previewActions} onClick={(e) => e.stopPropagation()}>
+            {externalUrl && (
+              <HoverButton
+                className={styles.overlayActionBtn}
+                icon={<ExternalLink size={15} aria-hidden="true" />}
+                href={externalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className={styles.btnTextFull}>{t.newTab}</span>
+                <span className={styles.btnTextShort}>{language === 'id' ? 'Buka Web' : 'Live'}</span>
+              </HoverButton>
+            )}
+            {repoUrl && (
+              <HoverButton
+                className={styles.overlayActionBtn}
+                icon={<GitHubIcon size={15} />}
+                href={repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className={styles.btnTextFull}>GitHub Repo</span>
+                <span className={styles.btnTextShort}>GitHub</span>
+              </HoverButton>
+            )}
           </div>
         )}
       </div>
 
-      {/* ── 1. TOMBOL LINK ── */}
-      {(externalUrl || repoUrl) && (
-        <div className="modal-toolbar">
-          {externalUrl && (
-            <HoverButton
-              icon={<ExternalLink size={16} aria-hidden="true" />}
-              href={externalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t.newTab}
-            </HoverButton>
-          )}
-          {repoUrl && (
-            <HoverButton
-              icon={<GitHubIcon size={16} />}
-              href={repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GitHub Repo
-            </HoverButton>
-          )}
-        </div>
-      )}
-
       {/* ── 2. ROLE + DESKRIPSI ── */}
       <div className="modal-info-section">
-        <div className="modal-roles">
-          {(Array.isArray(role) ? role : [role]).map(r => (
-            <span className="sticker" key={r}>
-              {t.role}: {r}
-            </span>
-          ))}
-        </div>
-        {description && (
-          <div className="modal-description">
-            {description.split('\n\n').filter(Boolean).map((para, i) => (
-              <p key={i}>{para}</p>
+        <div className={styles.roleRow}>
+          <span className={styles.roleLabel}>{t.role || 'Role'}:</span>
+          <div className={styles.roleChips}>
+            {roles.map(r => (
+              <span className="sticker" key={r}>
+                {r}
+              </span>
             ))}
+          </div>
+        </div>
+        {displayDesc && (
+          <div className="modal-description">
+            {displayDesc
+              .split('\n\n')
+              .map(p => p.trim())
+              .filter(Boolean)
+              .map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
           </div>
         )}
       </div>
@@ -554,34 +577,42 @@ export function ProjectFrame({
         <div className="modal-filmstrip-section">
           <FilmStrip
             items={media}
-            title={title}
+            title={displayTitle}
             language={language}
-            onOpenLightbox={index => setLightboxIndex(index)}
           />
         </div>
       )}
 
-      {/* ── 4. TOOLS ── */}
-      {stack.length > 0 && (
+      {/* ── 4. TECH STACK & ARSITEKTUR (gaya sama dengan baris Role) ── */}
+      {(stack.length > 0 || (architecture?.length ?? 0) > 0) && (
         <div className="modal-tools-section">
-          <div className="flex flex-wrap gap-2">
-            {stack.map(s => (
-              <span className="sticker" key={s}>
-                {s}
-              </span>
-            ))}
+          <div className={styles.specGrid}>
+            {stack.length > 0 && (
+              <>
+                <span className={styles.roleLabel}>{t.techStack}:</span>
+                <div className={styles.roleChips}>
+                  {stack.map(s => (
+                    <span className="sticker" key={s}>
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
+            {architecture && architecture.length > 0 && (
+              <>
+                <span className={styles.roleLabel}>{t.architecture}:</span>
+                <div className={styles.roleChips}>
+                  {architecture.map(a => (
+                    <span className="sticker" key={a}>
+                      {a}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
-      )}
-
-      {/* ── LIGHTBOX OVERLAY ── */}
-      {lightboxIndex !== null && media && media[lightboxIndex] && (
-        <Lightbox
-          items={media}
-          initialIndex={lightboxIndex}
-          title={title}
-          onClose={() => setLightboxIndex(null)}
-        />
       )}
     </div>
   );

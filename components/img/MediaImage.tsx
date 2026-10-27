@@ -8,6 +8,7 @@ interface CloudinaryImageProps {
     width?: number;
     className?: string;
     onError?: React.ReactEventHandler<HTMLImageElement>;
+    onLoad?: React.ReactEventHandler<HTMLImageElement>;
     style?: React.CSSProperties;
     loading?: 'lazy' | 'eager';
     draggable?: boolean;
@@ -32,6 +33,7 @@ export const CloudinaryImage: React.FC<CloudinaryImageProps> = ({
     width,
     className,
     onError,
+    onLoad,
     style,
     loading = 'lazy',
     draggable = false
@@ -48,6 +50,7 @@ export const CloudinaryImage: React.FC<CloudinaryImageProps> = ({
             loading={loading}
             decoding="async"
             onError={onError}
+            onLoad={onLoad}
             style={style}
             draggable={draggable}
         />

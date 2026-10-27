@@ -64,7 +64,6 @@ export function WorkSection({
 
   return (
     <div className={styles.workWrapper}>
-      <div className={styles.tornEdgeShadow} aria-hidden="true" />
       <section id="work" className={`work-band ${styles.workBand}`}>
         <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
         <div className={`${styles.stickyHeader} ${isStuck ? styles.isStuck : ''}`}>
