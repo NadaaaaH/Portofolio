@@ -1,0 +1,125 @@
+.card {
+  --base-rotate: -1.5deg;
+  --hover-delta-rotate: 0.4deg;
+  position: relative;
+  cursor: pointer;
+  transform: rotate(var(--base-rotate));
+  transition: transform 0.28s ease-out, box-shadow 0.28s ease-out;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:global(.project-card).card:nth-child(even) {
+  --base-rotate: 1.4deg;
+  --hover-delta-rotate: -0.4deg;
+}
+
+@media (max-width: 640px) {
+  :global(.project-card).card,
+  :global(.project-card).card:nth-child(even) {
+    --base-rotate: 0.5deg;
+    --hover-delta-rotate: 0.3deg;
+  }
+}
+
+/* Stabilize hover hit-area to eliminate edge vibration when translateY triggers */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -4px -4px -12px -4px;
+  pointer-events: auto;
+  z-index: -1;
+}
+
+:global(.project-card).card:hover,
+:global(.project-card).card:focus-visible,
+:global(.project-card).card:focus-within {
+  transform: translateY(-7px) rotate(calc(var(--base-rotate) + var(--hover-delta-rotate)));
+  box-shadow: 0 16px 28px oklch(0.28 0.035 80 / 18%), var(--lift-shadow);
+  z-index: 5;
+}
+
+:global(.project-card).card:focus-visible {
+  outline: 2px solid var(--denim-ink);
+  outline-offset: 5px;
+}
+
+/* Role row: label and chips aligned vertically */
+.roleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 16px 4px 0;
+}
+
+.roleLabel {
+  color: var(--denim-ink);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 27px; /* aligns vertically with the sticker chip */
+  flex-shrink: 0;
+}
+
+.roleChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Title: thicker font, larger size, increased margin-top to separate from role chips */
+:global(.project-card) .title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-top: 22px;
+  margin-bottom: 8px;
+  margin-left: 4px;
+  margin-right: 4px;
+  color: var(--denim-ink);
+}
+
+@media (max-width: 640px) {
+  :global(.project-card) .title {
+    font-size: 19px;
+    margin-top: 18px;
+  }
+}
+
+/* Description: line-clamp: 3 with uniform min-height */
+:global(.project-card) .description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.75;
+  min-height: calc(13px * 1.75 * 3);
+  margin: 10px 4px 14px;
+}
+
+@media (max-width: 640px) {
+  :global(.project-card) .description {
+    font-size: 12px;
+    min-height: calc(12px * 1.75 * 3);
+  }
+}
+
+.cardBottom {
+  position: relative;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.project-card).card {
+    transition: none !important;
+  }
+
+  :global(.project-card).card:hover,
+  :global(.project-card).card:focus-visible,
+  :global(.project-card).card:focus-within {
+    transform: rotate(var(--base-rotate)) !important;
+    box-shadow: var(--paper-shadow) !important;
+  }
+}

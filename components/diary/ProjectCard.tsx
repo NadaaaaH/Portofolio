@@ -1,8 +1,10 @@
 "use client";
-import { ArrowUpRight, ImageIcon, Play, ExternalLink } from 'lucide-react';
+import React from 'react';
+import { ImageIcon, Play, ExternalLink } from 'lucide-react';
 import { Tape, Pin, Sticker } from '@/components/decorations';
 import { copy, type Language, type Project } from '@/data/portfolio';
 import { CloudinaryImage } from '@/components/img/MediaImage';
+import styles from './ProjectCard.module.css';
 
 function MissingMediaInline({ type, label }: { type: Project['type']; label: string }) {
   const Icon = type === 'video' ? Play : ImageIcon;
@@ -25,13 +27,31 @@ export function ProjectCard({
   project,
   language,
   onOpen,
-  summary,
 }: ProjectCardProps) {
   const t = copy[language];
   const creative = project.category === 'Creative Works';
+  const projectTitle = project.title;
+  const projectDescription = project.description || '';
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      if (e.target !== e.currentTarget) return;
+      e.preventDefault();
+      onOpen(project);
+    }
+  };
+
+  const rawRoles = Array.isArray(project.role) ? project.role : [project.role];
+  const roles = rawRoles.map(r => r.replace(/^Role:\s*/i, '').trim()).filter(Boolean);
+
   return (
     <article
-      className={`project-card scroll-reveal polaroid ${creative ? 'creative-card' : ''}`}
+      role="button"
+      tabIndex={0}
+      aria-label={projectTitle}
+      onClick={() => onOpen(project)}
+      onKeyDown={handleKeyDown}
+      className={`project-card scroll-reveal polaroid ${creative ? 'creative-card' : ''} ${styles.card}`}
     >
       {project.id.endsWith('1') ? (
         <Pin />
@@ -62,26 +82,20 @@ export function ProjectCard({
         ) : (
           <MissingMediaInline type={project.type} label={project.previewLabels[0] || t.missing} />
         )}
-        <button
-          className="frame-open"
-          aria-label={`${t.open}: ${project.title}`}
-          onClick={() => onOpen(project)}
-        >
-          <span className="open-badge">
-            <ArrowUpRight size={13} />
-            {t.open}
-          </span>
-        </button>
       </div>
-      <div className="card-meta">
-        <Sticker>{project.role}</Sticker>
-        <span className="page-number">&nearr;</span>
+      <div className={styles.roleRow}>
+        <span className={styles.roleLabel}>{t.role || 'Role'}:</span>
+        <div className={styles.roleChips}>
+          {roles.map(r => (
+            <Sticker key={r}>{r}</Sticker>
+          ))}
+        </div>
       </div>
-      <h3>{summary?.title || project.title}</h3>
-      {(summary?.description || project.description) && (
-        <p className="card-description">{summary?.description || project.description}</p>
-      )}
-      <div className="card-bottom">
+      <h3 className={styles.title}>{projectTitle}</h3>
+      <p className={`card-description ${styles.description}`}>
+        {projectDescription || '\u00A0'}
+      </p>
+      <div className={`card-bottom ${styles.cardBottom}`}>
         <div className="stack-list">
           {project.stack.map(s => (
             <span key={s}>{s}</span>
@@ -91,7 +105,15 @@ export function ProjectCard({
           className="ghost-icon-btn"
           aria-label={`${t.open}: ${project.title}`}
           title={t.open}
-          onClick={() => onOpen(project)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpen(project);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.stopPropagation();
+            }
+          }}
         >
           <ExternalLink />
         </button>

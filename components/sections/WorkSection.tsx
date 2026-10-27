@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Paperclip } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProjectCard } from '@/components/diary/ProjectCard';
@@ -10,7 +11,6 @@ import {
   copy,
   filterProjects,
   projects,
-  summaries,
   type Category,
   type Language,
   type Project,
@@ -29,14 +29,31 @@ export function WorkSection({
   onCategoryChange,
   onOpenProject,
 }: WorkSectionProps) {
+  const [isStuck, setIsStuck] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const t = copy[language];
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsStuck(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
 
   const webDev = projects.filter(p => p.category === 'Web Development');
   const ux = projects.filter(p => p.category === 'UI/UX Design');
   const creative = projects.filter(p => p.category === 'Creative Works');
 
-  const renderCard = (p: Project, summary?: { title: string; description: string }) => (
-    <ProjectCard key={p.id} project={p} language={language} onOpen={onOpenProject} summary={summary} />
+  const renderCard = (p: Project) => (
+    <ProjectCard key={p.id} project={p} language={language} onOpen={onOpenProject} />
   );
 
   const filtered = filterProjects(category);
@@ -47,24 +64,35 @@ export function WorkSection({
 
   return (
     <div className={styles.workWrapper}>
+      <div className={styles.tornEdgeShadow} aria-hidden="true" />
       <section id="work" className={`work-band ${styles.workBand}`}>
-        <div className="page-inner">
-        <SectionTitle text={t.work} page="01" note={t.collection} />
-        <div className="filters" role="group" aria-label={language === 'id' ? 'Filter kategori project' : 'Project category filter'}>
-          {categories.map(c => (
-            <Button
-              key={c}
-              variant="index"
-              aria-pressed={category === c}
-              onClick={() => onCategoryChange(c)}
+        <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
+        <div className={`${styles.stickyHeader} ${isStuck ? styles.isStuck : ''}`}>
+          <div className={`page-inner ${styles.stickyHeaderInner}`}>
+            <SectionTitle text={t.work} page="01" note={t.collection} />
+            <div
+              className={`filters ${styles.stickyHeaderFilters}`}
+              role="group"
+              aria-label={language === 'id' ? 'Filter kategori project' : 'Project category filter'}
             >
-              {c === 'UI/UX Design' ? 'UI/UX' : c}
-            </Button>
-          ))}
+              {categories.map(c => (
+                <Button
+                  key={c}
+                  variant="index"
+                  aria-pressed={category === c}
+                  onClick={() => onCategoryChange(c)}
+                >
+                  {c === 'UI/UX Design' ? 'UI/UX' : c}
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
-        <div aria-live="polite" aria-atomic="true" className="sr-only">
-          {category}: {filtered.length} projects
-        </div>
+
+        <div className={`page-inner ${styles.cardsContainer}`}>
+          <div aria-live="polite" aria-atomic="true" className="sr-only">
+            {category}: {filtered.length} projects
+          </div>
         {category === 'All' ? (
           <>
             <div className="category-group">
@@ -73,7 +101,7 @@ export function WorkSection({
                 <Paperclip size={22} className="inline-block" style={{ marginLeft: '8px' }} aria-hidden="true" />
               </h3>
               <div className="project-grid">
-                {webDev.map((p, i) => renderCard(p, i === 0 ? summaries.portfolio : undefined))}
+                {webDev.map((p) => renderCard(p))}
               </div>
               <div className="more-row">
                 <Button variant="link" onClick={() => onCategoryChange('Web Development')}>
@@ -84,7 +112,7 @@ export function WorkSection({
             <div className="category-group">
               <h3 className="category-subtitle">UI/UX Design</h3>
               <div className="project-grid">
-                {ux.map((p, i) => renderCard(p, i === 0 ? summaries.mentari : undefined))}
+                {ux.map((p) => renderCard(p))}
               </div>
               <div className="more-row">
                 <Button variant="link" onClick={() => onCategoryChange('UI/UX Design')}>

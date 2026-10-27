@@ -13,6 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import { copy, type Language, type Project, type ProjectMedia } from '@/data/portfolio';
+import { HoverButton } from '@/components/ui/HoverButton/HoverButton';
 import styles from './ProjectFrame.module.css';
 
 /* ─── Cloudinary URL Builders ─── */
@@ -508,36 +509,36 @@ export function ProjectFrame({
       {(externalUrl || repoUrl) && (
         <div className="modal-toolbar">
           {externalUrl && (
-            <a
+            <HoverButton
+              icon={<ExternalLink size={16} aria-hidden="true" />}
               href={externalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="modal-action-btn"
             >
-              <ExternalLink size={18} aria-hidden="true" />
-              <span>{t.newTab}</span>
-            </a>
+              {t.newTab}
+            </HoverButton>
           )}
           {repoUrl && (
-            <a
+            <HoverButton
+              icon={<GitHubIcon size={16} />}
               href={repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="modal-action-btn"
             >
-              <GitHubIcon size={18} />
-              <span>GitHub Repo</span>
-            </a>
+              GitHub Repo
+            </HoverButton>
           )}
         </div>
       )}
 
       {/* ── 2. ROLE + DESKRIPSI ── */}
       <div className="modal-info-section">
-        <div>
-          <span className="sticker">
-            {t.role}: {role}
-          </span>
+        <div className="modal-roles">
+          {(Array.isArray(role) ? role : [role]).map(r => (
+            <span className="sticker" key={r}>
+              {t.role}: {r}
+            </span>
+          ))}
         </div>
         {description && (
           <div className="modal-description">

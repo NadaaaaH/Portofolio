@@ -836,7 +836,6 @@
   background-image: linear-gradient(color-mix(in oklab, var(--denim) 10%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--denim) 10%, transparent) 1px, transparent 1px);
   background-size: 24px 24px, 24px 24px;
   padding: 42px 0 60px;
-  transform: translateZ(0);
 }
 
 /* ── Scroll-reveal: elemen tampil smooth saat masuk viewport ── */
@@ -934,10 +933,18 @@
 
 .card-meta {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
   margin: 17px 4px 11px;
+}
+
+.card-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
 }
 
 .project-card h3 {
@@ -1378,6 +1385,13 @@
   gap: 12px;
   flex-wrap: wrap;
   margin-bottom: 24px;
+}
+
+.modal-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
 .modal-action-btn {

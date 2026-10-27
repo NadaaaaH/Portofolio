@@ -18,7 +18,7 @@ export interface Project {
   description: string;
   stack: string[];
   category: Exclude<Category, 'All'>;
-  role: string;
+  role: string | string[];
   type: 'website' | 'video' | 'image';
   src: string;
   links: { demo?: string; repo?: string };
@@ -80,7 +80,7 @@ const originalProjects: Project[] = [
     description: 'Platform web portofolio bertema notebookbinder interaktif yang dikembangkan menggunakan Next.js App Router, Tailwind CSS v4, GSAP Animations, dan Supabase backend. Dilengkapi fitur switcher multi-bahasa (ID/EN) dan animasi stiker interaktif.',
     stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Supabase'],
     category: 'Web Development',
-    role: 'Web Developer',
+    role: ['Fullstack Developer', 'System Analyst'],
     type: 'website',
     src: 'https://tumbuhberbagi.duckdns.org/',
     links: { demo: 'https://google.com', repo: 'https://github.com' },
@@ -216,6 +216,65 @@ const originalProjects: Project[] = [
     links: { demo: 'https://figma.com' },
     previewLabels: ['Desktop UI Wireframe & Prototype', 'Mobile UI Screens Showcase'],
   },
+  /*
+  '''
+  {
+    id: 'writing-0',
+    title: 'Moonlit Full',
+    group: 'Fiction Writing',
+    label: 'Novel',
+    description: 'Sebuah novel fiksi naratif yang mengisahkan alur perjalanan karakter utama menemukan tempat terbaiknya di dunia. Penulisan berfokus pada emosi mendalam dan pembangunan suasana.\n\nNaskah ini telah dibaca ribuan pembaca dan mendapatkan respon hangat berkat konflik emosional yang relatable serta pemilihan diksi yang puitis.',
+    stack: [],
+    category: 'Writing',
+    role: 'Writer',
+    type: 'image',
+    src: '',
+    links: {},
+    previewLabels: ['Novel'],
+  },
+  {
+    id: 'writing-1',
+    title: 'You Changed Me (Skrip Drama Youtube)',
+    group: 'Fiction Writing',
+    label: 'Skrip Drama/film',
+    description: 'Naskah skenario serial web drama YouTube dengan dialog yang natural, ritme alur adegan yang dinamis, serta instruksi aksi kamera yang terstruktur rapi untuk tim produksi.',
+    stack: [],
+    category: 'Writing',
+    role: 'Writer',
+    type: 'image',
+    src: '',
+    links: {},
+    previewLabels: ['Skrip Drama/film'],
+  },
+  {
+    id: 'writing-2',
+    title: 'You Changed Me (Skrip Drama Youtube)',
+    group: 'Non-Fiction Writing',
+    label: 'Karya Tulis Ilmiah',
+    description: 'Penulisan makalah dan karya ilmiah berbasis metodologi penelitian empiris dengan tinjauan pustaka sistematis, analisis data presisi, serta penyusunan sitasi standar akademik.',
+    stack: [],
+    category: 'Writing',
+    role: 'Writer',
+    type: 'image',
+    src: '',
+    links: {},
+    previewLabels: ['Karya Tulis Ilmiah'],
+  },
+  {
+    id: 'writing-3',
+    title: 'Promotion',
+    group: 'Copy Writing - Social Media',
+    label: 'Promotion',
+    description: '',
+    stack: ['Notion', 'Google Docs'],
+    category: 'Writing',
+    role: 'Writer',
+    type: 'image',
+    src: '',
+    links: {},
+    previewLabels: ['Copy Ad 1', 'Copy Ad 2', 'Copy Ad 3'],
+  },
+  */
   {
     id: 'creative-0',
     title: 'Cover Novel',
@@ -299,10 +358,44 @@ export const projects: Project[] = originalProjects;
 export function filterProjects(category: Category) {
   return projects.filter(p => category === 'All' || p.category === category);
 }
-export const achievements = [
-  { id: 1, title: 'Juara 3 Lomba Startup Innovation Pendikar 2025', category: 'Competition', year: '2025' },
-  { id: 2, title: 'Juara 1 UI/UX Design Challenge', category: 'Design Award', year: '2025' },
-  { id: 3, title: 'Silver Button Youtube tahun 2025', category: 'Creator Milestone', year: '2025' },
+export interface Achievement {
+  id: number;
+  publicId: string;
+  title: string;
+  category: string;
+  year: string;
+  width?: number;
+  height?: number;
+}
+
+export const achievements: Achievement[] = [
+  {
+    id: 1,
+    publicId: 'Juara_3_3',
+    title: 'Juara 3 Lomba Startup Innovation Pendikar',
+    category: 'Competition',
+    year: '2025',
+    width: 2000,
+    height: 1414,
+  },
+  {
+    id: 2,
+    publicId: 'WhatsApp_Image_2026-10-12_at_1.05.53_PM',
+    title: 'Juara 2 Lomba Web Design Competition',// TODO: Gambar di Cloudinary bertuliskan 'Juara 2 Web Design Competition 2026'
+    category: 'Competition',
+    year: '2026', // TODO: Di sertifikat tertulis 2026
+    width: 1600,
+    height: 1200,
+  },
+  {
+    id: 3,
+    publicId: 's_portal_0b21ec6468cb438192238a96870f1527',
+    title: 'Finalis TOP 4 Business Plan Competition IIO', // TODO: Gambar di Cloudinary bertuliskan 'Finalis Lomba Bussines Plan Competition Indonesian Industrial Outlook 2026'
+    category: 'Competition',
+    year: '2026', // TODO: Di sertifikat tertulis 2026/2025
+    width: 1754,
+    height: 1240,
+  },
 ];
 export const skills = [
   { name: 'HTML & CSS', level: 'Advanced', icon: '\ud83c\udf10' },
@@ -368,4 +461,6 @@ export const socialLinks = {
 export const summaries = {
   portfolio: { title: 'Website Portofolio', description: 'Platform portofolio interaktif berbasis Next.js dan Tailwind CSS dengan desain bertema notebookbinder yang ceria dan penuh animasi stiker interaktif.' },
   mentari: { title: 'Design Website Games For Kids', description: 'Desain antarmuka interaktif dan edukatif untuk anak-anak dengan warna-warna pastel yang menyenangkan dan alur navigasi yang ramah pengguna.' },
+  novel: { title: 'Novel - Moonlit Full', description: 'Kisah fiksi romantis tentang pencarian jati diri di bawah sinar bulan purnama.' },
+  script: { title: 'Skrip Drama / Film', description: 'Naskah skenario drama berdurasi pendek untuk produksi konten video YouTube.' },
 };
