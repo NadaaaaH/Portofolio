@@ -74,18 +74,29 @@ export const CloudinaryVideo: React.FC<MediaVideoProps> = ({
 
     const videoElementRef = useRef<HTMLVideoElement | null>(null);
 
-    // IntersectionObserver: ketika mode autoplay aktif, otomatis play saat terlihat di layar
+    // IntersectionObserver & canplay: ketika mode autoplay aktif, otomatis play saat terlihat di layar
     // dan pause saat keluar layar demi efisiensi performa & baterai
     useEffect(() => {
         if (!isAutoplay) return;
         const el = videoElementRef.current;
         if (!el) return;
 
+        if (finalMuted) {
+            el.muted = true;
+            el.defaultMuted = true;
+        }
+
+        const playVideo = () => {
+            if (el.paused) {
+                el.play().catch(() => {});
+            }
+        };
+
         const observer = new IntersectionObserver(
             entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        el.play().catch(() => {});
+                        playVideo();
                     } else {
                         el.pause();
                     }
@@ -95,14 +106,23 @@ export const CloudinaryVideo: React.FC<MediaVideoProps> = ({
         );
 
         observer.observe(el);
-        return () => observer.disconnect();
-    }, [isAutoplay]);
+        el.addEventListener('canplay', playVideo);
+
+        return () => {
+            observer.disconnect();
+            el.removeEventListener('canplay', playVideo);
+        };
+    }, [isAutoplay, finalMuted]);
 
     if (!videoId) return null;
 
     // Helper ref gabungan untuk innerRef dari luar dan videoElementRef internal
     const handleRef = (el: HTMLVideoElement | null) => {
         videoElementRef.current = el;
+        if (el && finalMuted) {
+            el.muted = true;
+            el.defaultMuted = true;
+        }
         if (typeof innerRef === 'function') {
             innerRef(el);
         } else if (innerRef && 'current' in innerRef) {

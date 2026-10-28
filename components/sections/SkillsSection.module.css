@@ -1,6 +1,62 @@
 .skillsSection {
+  --paper-band-shadow:
+    0 -2px 6px rgba(0, 0, 0, 0.05),
+    0 -1px 2px rgba(0, 0, 0, 0.04),
+    0 2px 6px rgba(0, 0, 0, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.04);
   position: relative;
+  z-index: 25;
+  width: 100%;
   background-color: var(--secondary);
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--denim) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--denim) 10%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px;
+  background-position: 0 0;
+  padding-top: 50px;
+  padding-bottom: 20px;
+  box-shadow: var(--paper-band-shadow);
+}
+
+.tape {
+  position: absolute;
+  width: 76px;
+  height: 22px;
+  background-color: color-mix(in oklab, var(--primary) 70%, transparent);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 6px,
+    color-mix(in oklab, var(--card) 45%, transparent) 6px 8px
+  );
+  clip-path: polygon(
+    3% 0,
+    97% 2%,
+    100% 16%,
+    97% 32%,
+    100% 50%,
+    97% 74%,
+    100% 96%,
+    2% 100%,
+    0 78%,
+    3% 62%,
+    0 34%
+  );
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
+  z-index: 30;
+  pointer-events: none;
+  user-select: none;
+}
+
+.tapeTopLeft {
+  top: -11px;
+  left: clamp(24px, 8vw, 120px);
+  transform: rotate(-3.5deg);
+}
+
+.tapeTopRight {
+  top: -11px;
+  right: clamp(24px, 8vw, 120px);
+  transform: rotate(3deg);
 }
 
 .skillsContainer {
@@ -108,6 +164,28 @@
 }
 
 @media (max-width: 640px) {
+  .skillsSection {
+    padding-top: 36px;
+    padding-bottom: 12px;
+  }
+
+  .tape {
+    width: 62px;
+    height: 18px;
+  }
+
+  .tapeTopLeft {
+    top: -9px;
+    left: clamp(16px, 6vw, 36px);
+    transform: rotate(-3deg);
+  }
+
+  .tapeTopRight {
+    top: -9px;
+    right: clamp(16px, 6vw, 36px);
+    transform: rotate(2.5deg);
+  }
+
   .skillsContainer {
     gap: 12px;
   }

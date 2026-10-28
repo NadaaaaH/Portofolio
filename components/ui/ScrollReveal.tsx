@@ -6,19 +6,28 @@ import { useEffect } from "react";
  * ScrollReveal — mounts an IntersectionObserver once for the whole page.
  * Adds `is-visible` to every `.scroll-reveal` element as it enters viewport.
  * Pure CSS transitions handle the actual animation (no GSAP needed).
+ *
+ * Elemen `.scroll-reveal` yang baru dirender SETELAH mount (misal project card
+ * saat tab filter "Karyaku" diganti) ikut didaftarkan lewat MutationObserver,
+ * sehingga tidak tertahan di state awal (opacity: 0).
  */
 export function ScrollReveal() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const targets = document.querySelectorAll<HTMLElement>(".scroll-reveal");
-    if (!targets.length) return;
+    const reveal = (el: Element) => el.classList.add("is-visible");
+
+    // Fallback: browser tanpa IntersectionObserver → langsung tampilkan semua
+    if (!("IntersectionObserver" in window)) {
+      document.querySelectorAll(".scroll-reveal").forEach(reveal);
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
+            reveal(entry.target);
             observer.unobserve(entry.target);
           }
         });
@@ -26,9 +35,31 @@ export function ScrollReveal() {
       { rootMargin: "0px 0px -60px 0px", threshold: 0.1 }
     );
 
-    targets.forEach((el) => observer.observe(el));
+    const observeWithin = (root: ParentNode) => {
+      if (root instanceof Element && root.matches(".scroll-reveal:not(.is-visible)")) {
+        observer.observe(root);
+      }
+      root
+        .querySelectorAll?.(".scroll-reveal:not(.is-visible)")
+        .forEach((el) => observer.observe(el));
+    };
 
-    return () => observer.disconnect();
+    observeWithin(document);
+
+    // Daftarkan elemen `.scroll-reveal` yang ditambahkan belakangan (re-render filter, dsb.)
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        m.addedNodes.forEach((node) => {
+          if (node instanceof Element) observeWithin(node);
+        });
+      });
+    });
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      mutationObserver.disconnect();
+      observer.disconnect();
+    };
   }, []);
 
   return null;

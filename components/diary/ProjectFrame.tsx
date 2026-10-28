@@ -3,6 +3,7 @@ import { createPortal, flushSync } from 'react-dom';
 import gsap from 'gsap';
 import { Flip } from 'gsap/Flip';
 import {
+  ArrowUpRight,
   ExternalLink,
   ImageIcon,
   LoaderCircle,
@@ -521,8 +522,8 @@ export function ProjectFrame({
           <div className={styles.previewActions} onClick={(e) => e.stopPropagation()}>
             {externalUrl && (
               <HoverButton
-                className={styles.overlayActionBtn}
-                icon={<ExternalLink size={15} aria-hidden="true" />}
+                icon={<ExternalLink size={16} aria-hidden="true" />}
+                trailingIcon={<ArrowUpRight size={16} aria-hidden="true" />}
                 href={externalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -533,8 +534,8 @@ export function ProjectFrame({
             )}
             {repoUrl && (
               <HoverButton
-                className={styles.overlayActionBtn}
-                icon={<GitHubIcon size={15} />}
+                icon={<GitHubIcon size={16} />}
+                trailingIcon={<ArrowUpRight size={16} aria-hidden="true" />}
                 href={repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"

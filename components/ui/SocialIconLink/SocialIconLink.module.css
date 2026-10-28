@@ -1,4 +1,4 @@
-﻿/* SocialIconLink — ikon bundar dengan efek layer naik dari bawah */
+/* SocialIconLink — ikon bundar dengan efek layer naik dari bawah */
 
 .link {
   position: relative;
@@ -37,12 +37,23 @@
 
 /* Warna layer — varian A (biru tua) */
 .varA::before {
-  background: var(--hover-social-fill-a);
+  background: var(--social-hover-bg, var(--hover-social-fill-a));
 }
 
 /* Warna layer — varian B (lime) */
 .varB::before {
-  background: var(--hover-social-fill-b);
+  background: var(--social-hover-bg, var(--hover-social-fill-b));
+}
+
+/* Mode hover spesifik per token (misal: di footer / onGreen) */
+.hoverBlue {
+  --social-hover-bg: var(--hover-social-fill-a);
+  --social-hover-icon: var(--hover-social-icon);
+}
+
+.hoverWhiteGreen {
+  --social-hover-bg: var(--card); /* Putih/krem terang */
+  --social-hover-icon: #2e5214;   /* Hijau tua persis dari .ransom-tile.ransom-text-olive */
 }
 
 /* Ikon di atas layer */
@@ -58,7 +69,7 @@
 .link:hover .icon,
 .link:focus-visible .icon {
   transform: rotateY(360deg);
-  color: var(--hover-social-icon);
+  color: var(--social-hover-icon, var(--hover-social-icon));
 }
 
 /* Focus ring keyboard-accessible */

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Mail } from 'lucide-react';
 import { socialLinks } from '@/data/portfolio';
@@ -42,12 +42,31 @@ export function GitHubIcon({ size = 16 }: { size?: number }) {
   );
 }
 
+export type SocialPlatform = 'linkedin' | 'instagram' | 'email' | 'github';
+export type SocialHoverStyle = 'blue' | 'white-green';
+
+/**
+ * Pemetaan warna hover per ikon khusus ketika berada di atas background hijau (onGreen / Footer):
+ * - linkedin & email: 'blue' (latar biru tua, ikon putih — sama persis dengan hero)
+ * - instagram & github: 'white-green' (latar putih/krem, ikon hijau tua #2e5214)
+ */
+export const SOCIAL_HOVER_MAP_ON_GREEN: Record<SocialPlatform, SocialHoverStyle> = {
+  linkedin: 'blue',
+  email: 'blue',
+  instagram: 'white-green',
+  github: 'white-green',
+};
+
 export interface SocialLinksProps {
   footer?: boolean;
+  /** 'default' (gaya hero) atau 'onGreen' (khusus background hijau footer) */
+  variant?: 'default' | 'onGreen';
   className?: string;
 }
 
-export function SocialLinks({ footer = false, className = '' }: SocialLinksProps) {
+export function SocialLinks({ variant = 'default', footer = false, className = '' }: SocialLinksProps) {
+  const isOnGreen = variant === 'onGreen';
+
   return (
     <div className={`social-links ${className}`.trim()}>
       <SocialIconLink
@@ -55,6 +74,7 @@ export function SocialLinks({ footer = false, className = '' }: SocialLinksProps
         label="LinkedIn"
         icon={<LinkedInIcon />}
         variant="a"
+        hoverStyle={isOnGreen ? SOCIAL_HOVER_MAP_ON_GREEN.linkedin : undefined}
         target="_blank"
         rel="noopener noreferrer"
       />
@@ -63,6 +83,7 @@ export function SocialLinks({ footer = false, className = '' }: SocialLinksProps
         label="Instagram"
         icon={<InstagramIcon />}
         variant="b"
+        hoverStyle={isOnGreen ? SOCIAL_HOVER_MAP_ON_GREEN.instagram : undefined}
         target="_blank"
         rel="noopener noreferrer"
       />
@@ -71,19 +92,19 @@ export function SocialLinks({ footer = false, className = '' }: SocialLinksProps
         label="Email (Gmail)"
         icon={<Mail size={16} />}
         variant="a"
+        hoverStyle={isOnGreen ? SOCIAL_HOVER_MAP_ON_GREEN.email : undefined}
         target="_blank"
         rel="noopener noreferrer"
       />
-      {!footer && (
-        <SocialIconLink
-          href={socialLinks.github}
-          label="GitHub"
-          icon={<GitHubIcon size={16} />}
-          variant="b"
-          target="_blank"
-          rel="noopener noreferrer"
-        />
-      )}
+      <SocialIconLink
+        href={socialLinks.github}
+        label="GitHub"
+        icon={<GitHubIcon size={16} />}
+        variant="b"
+        hoverStyle={isOnGreen ? SOCIAL_HOVER_MAP_ON_GREEN.github : undefined}
+        target="_blank"
+        rel="noopener noreferrer"
+      />
     </div>
   );
 }

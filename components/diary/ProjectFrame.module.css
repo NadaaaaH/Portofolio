@@ -216,31 +216,6 @@
   pointer-events: auto;
 }
 
-.overlayActionBtn {
-  background: var(--card) !important;
-  color: var(--denim-ink) !important;
-  border: 1.5px solid var(--denim) !important;
-  border-radius: 4px !important;
-  box-shadow: 0 2px 8px oklch(0.28 0.035 80 / 18%), var(--paper-shadow) !important;
-  height: 38px;
-  padding: 0 14px;
-  font-size: 13px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  backdrop-filter: blur(4px);
-}
-
-.overlayActionBtn:hover,
-.overlayActionBtn:focus-visible {
-  background: var(--denim-ink) !important;
-  color: var(--card) !important;
-  border-color: var(--denim-ink) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px color-mix(in oklab, var(--denim-ink) 30%, transparent) !important;
-}
-
 .btnTextFull {
   display: inline;
 }
@@ -254,12 +229,6 @@
     right: 10px;
     bottom: 10px;
     gap: 6px;
-  }
-
-  .overlayActionBtn {
-    height: 32px;
-    padding: 0 10px;
-    font-size: 12px;
   }
 
   .btnTextFull {

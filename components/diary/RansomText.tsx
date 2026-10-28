@@ -107,6 +107,43 @@ export const HERO_NAME_COLOR_PATTERNS = {
   line2: HERO_NAME_PATTERNS.line2.map((p) => p.bg),
 };
 
+/**
+ * Pola tile ransom khusus untuk Nama di Footer (latar hijau):
+ * HANYA menggunakan latar krem (cream), biru muda (soft-blue), dan biru denim (medium-blue).
+ * TIDAK ADA varian background hijau/lime agar terbaca kontras di atas footer hijau.
+ */
+export const FOOTER_NAME_PATTERNS: {
+  line1: RansomTilePattern[];
+  line2: RansomTilePattern[];
+} = {
+  // Baris 1: Nada (4 huruf) + Haifa (5 huruf) = 9 huruf
+  line1: [
+    { bg: 'medium-blue', text: 'white' }, // N
+    { bg: 'cream',       text: 'denim' }, // a
+    { bg: 'soft-blue',   text: 'navy' },  // d
+    { bg: 'cream',       text: 'olive' }, // a
+    { bg: 'soft-blue',   text: 'navy' },  // H
+    { bg: 'cream',       text: 'denim' }, // a
+    { bg: 'medium-blue', text: 'white' }, // i
+    { bg: 'cream',       text: 'olive' }, // f
+    { bg: 'soft-blue',   text: 'navy' },  // a
+  ],
+  // Baris 2: Nurfadhilah (11 huruf)
+  line2: [
+    { bg: 'cream',       text: 'olive' }, // N
+    { bg: 'soft-blue',   text: 'navy' },  // u
+    { bg: 'cream',       text: 'denim' }, // r
+    { bg: 'medium-blue', text: 'white' }, // f
+    { bg: 'cream',       text: 'olive' }, // a
+    { bg: 'soft-blue',   text: 'navy' },  // d
+    { bg: 'cream',       text: 'denim' }, // h
+    { bg: 'soft-blue',   text: 'navy' },  // i
+    { bg: 'cream',       text: 'olive' }, // l
+    { bg: 'medium-blue', text: 'white' }, // a
+    { bg: 'cream',       text: 'navy' },  // h
+  ],
+};
+
 // Pola siklus default untuk teks ransom umum (misal judul section di latar krem)
 export const DEFAULT_TILE_CYCLE: RansomTilePattern[] = [
   { bg: 'cream',       text: 'navy' },

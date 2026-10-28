@@ -1,8 +1,9 @@
-﻿import type { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import styles from "./SocialIconLink.module.css";
 
 export type SocialVariant = "a" | "b";
+export type SocialHoverStyle = "blue" | "white-green";
 
 export interface SocialIconLinkProps {
   href: string;
@@ -10,6 +11,7 @@ export interface SocialIconLinkProps {
   icon: ReactNode;
   /** "a" = biru tua (default), "b" = lime/olive */
   variant?: SocialVariant;
+  hoverStyle?: SocialHoverStyle;
   target?: string;
   rel?: string;
   className?: string;
@@ -27,6 +29,7 @@ export function SocialIconLink({
   label,
   icon,
   variant = "a",
+  hoverStyle,
   target = "_blank",
   rel = "noopener noreferrer",
   className,
@@ -41,6 +44,8 @@ export function SocialIconLink({
       className={cn(
         styles.link,
         variant === "b" ? styles.varB : styles.varA,
+        hoverStyle === "blue" && styles.hoverBlue,
+        hoverStyle === "white-green" && styles.hoverWhiteGreen,
         className
       )}
     >

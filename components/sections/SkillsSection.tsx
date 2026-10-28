@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { skills, type SkillItem } from '@/data/portfolio';
 import { SectionTitle } from '@/components/diary/SectionTitle';
-import { TornPaperEdge } from '@/components/decorations';
 import styles from './SkillsSection.module.css';
 
 // ── Konstanta Urutan Kategori ──
@@ -484,7 +483,9 @@ export function SkillsSection() {
 
   return (
     <section ref={sectionRef} className={`skills-band ${styles.skillsSection}`}>
-      <TornPaperEdge />
+      {/* Potongan solatip di garis tepi atas kertas bergrid */}
+      <div className={`${styles.tape} ${styles.tapeTopLeft}`} aria-hidden="true" />
+      <div className={`${styles.tape} ${styles.tapeTopRight}`} aria-hidden="true" />
       <div className="page-inner">
         <SectionTitle text="Skill" page="03" />
 

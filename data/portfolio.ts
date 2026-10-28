@@ -111,7 +111,7 @@ const originalProjects: Project[] = [
       en: 'Tumbuh Berbagi: Learning Platform & UTBK Simulation',
     },
     description: {
-      id: 'Platform web portofolio bertema notebook binder interaktif yang dikembangkan menggunakan Next.js App Router, Tailwind CSS v4, GSAP Animations, dan Supabase backend.\n\nDilengkapi fitur switcher multi-bahasa (ID/EN) dan animasi stiker interaktif yang responsif.',
+      id: 'Proyek akademik ini dikembangkan bersama mitra nyata, Tumbuh Berbagi, untuk mendukung efisiensi operasional pelaksanaan bimbingan dan persiapan ujian UTBK. Platform pembelajaran berbasis web ini menggabungkan landing page organisasi dengan sistem Tryout (TO) interaktif secara real-time, modul latihan soal mandiri, serta integrasi metode penilaian Item Response Theory (IRT). Selain itu, platform ini dilengkapi fitur manajemen konten untuk mempublikasikan berita, bank soal, dan jadwal ujian secara terstruktur.\n\nDalam proyek ini, aku merancang arsitektur sistem secara mandiri serta menguji dan membangun seluruh lini frontend dan backend menggunakan React dan Laravel/PHP. Aku mengimplementasikan otentikasi berbasis peran (role-based auth), verifikasi email otomatis via Brevo, integrasi metode IRT pada ujian simulasi terjadwal, dan perancangan skema database PostgreSQL pada NeonDB. Aku juga membangun dashboard admin untuk pengelolaan bank soal, analitik statistik per soal, serta otomatisasi laporan hasil ujian siswa yang dapat diunduh. Keseluruhan sistem diuji, diperbaiki, dan di-deploy di AWS dengan konfigurasi domain kustom.',
       en: 'Developed as an academic project in partnership with Tumbuh Berbagi, this web platform streamlines the organization’s operations for UTBK exam preparation. Built as a Modern Monolithic SPA using Inertia.js, it integrates an organizational landing page with an interactive real-time mock test (TO) system, self-paced practice modules, and an Item Response Theory (IRT) scoring mechanism. Additionally, the system features centralized content management for organizing question banks, exam schedules, and organizational updates.\n\nIn this project, I independently designed the system architecture and developed both the frontend and backend using React, Laravel, and Inertia.js. I implemented role-based authentication, automated email verification via Brevo SMTP Relay, IRT scoring integration for scheduled mock exams, PostgreSQL database schema design hosted on NeonDB, and media storage integration via Cloudflare R2 (S3-Compatible). On the administrative end, I built analytical dashboards using Recharts, integrated rich text editors (Tiptap/Quill), and configured automated PDF performance reporting (DomPDF). Finally, I containerized the application using Docker (multi-stage build) and managed deployment on AWS with custom domain configurations.',
     },
     stack: ['Laravel', 'React', 'Tailwind CSS', 'PHP', 'TypeScript', 'PostgreSQL'],
@@ -119,8 +119,9 @@ const originalProjects: Project[] = [
     category: 'Web Development',
     role: ['Fullstack Developer', 'System Analyst'],
     preview: {
-      type: 'image',
-      publicId: 'Screenshot_2026-10-18_211137',
+      type: 'video',
+      publicId: 'tumbuhberbagi-main',
+      autoplay: true,
     },
     links: { demo: 'https://tumbuhberbagi.duckdns.org/', repo: 'https://github.com' },
     imagePublicId: 'Screenshot_2026-10-18_211137',

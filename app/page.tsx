@@ -189,7 +189,7 @@ export default function Page() {
           <AchievementsSection />
           <SkillsSection />
           <CertificatesSection language={language} />
-          <Footer />
+          <Footer language={language} />
         </div>
       </main>
       <ProjectModal project={selected} language={language} onClose={() => setSelected(null)} />
