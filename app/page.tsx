@@ -16,6 +16,7 @@ import {
 } from '@/components/sections';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import heroStyles from '@/components/sections/HeroSection.module.css';
+import styles from './page.module.css';
 import { copy, type Category, type Language, type Project } from '@/data/portfolio';
 
 if (typeof window !== 'undefined') {
@@ -95,19 +96,33 @@ export default function Page() {
             }
 
             const workWrapper = document.getElementById('work-wrapper');
-            const achWrapper = document.getElementById('achievements-wrapper');
+            const upperLayer = document.getElementById('upper-layer');
 
-            if (workWrapper && achWrapper) {
+            if (workWrapper && upperLayer) {
               ScrollTrigger.create({
                 trigger: workWrapper,
                 start: 'bottom bottom',
-                endTrigger: achWrapper,
-                end: 'bottom top',
+                endTrigger: upperLayer,
+                end: 'top top',
                 pin: true,
                 pinSpacing: false,
                 anticipatePin: 1,
                 refreshPriority: 1,
                 invalidateOnRefresh: true,
+                onLeave: () => {
+                  if (workWrapper) workWrapper.style.visibility = 'hidden';
+                },
+                onEnterBack: () => {
+                  if (workWrapper) workWrapper.style.visibility = 'visible';
+                },
+                onLeaveBack: () => {
+                  if (workWrapper) workWrapper.style.visibility = 'visible';
+                },
+                onRefresh: (self) => {
+                  if (workWrapper) {
+                    workWrapper.style.visibility = self.progress === 1 ? 'hidden' : 'visible';
+                  }
+                },
               });
             }
 
@@ -117,6 +132,19 @@ export default function Page() {
         }
       );
     });
+
+    const workWrapper = document.getElementById('work-wrapper');
+    const upperLayer = document.getElementById('upper-layer');
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const ro = new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+    });
+
+    if (workWrapper) ro.observe(workWrapper);
+    if (upperLayer) ro.observe(upperLayer);
 
     if (document.fonts) {
       document.fonts.ready.then(() => {
@@ -130,6 +158,8 @@ export default function Page() {
     window.addEventListener('load', handleLoad);
 
     return () => {
+      clearTimeout(resizeTimer);
+      ro.disconnect();
       window.removeEventListener('load', handleLoad);
       ctx.revert();
     };
@@ -155,11 +185,13 @@ export default function Page() {
           onCategoryChange={setCategory}
           onOpenProject={openProject}
         />
-        <AchievementsSection />
-        <SkillsSection />
-        <CertificatesSection language={language} />
+        <div id="upper-layer" className={styles.upperLayer}>
+          <AchievementsSection />
+          <SkillsSection />
+          <CertificatesSection language={language} />
+          <Footer />
+        </div>
       </main>
-      <Footer />
       <ProjectModal project={selected} language={language} onClose={() => setSelected(null)} />
       <ScrollReveal />
     </div>

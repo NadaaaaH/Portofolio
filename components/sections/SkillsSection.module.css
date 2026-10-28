@@ -1,6 +1,5 @@
 .skillsSection {
   position: relative;
-  z-index: 30;
   background-color: var(--secondary);
 }
 

@@ -1,0 +1,6 @@
+.upperLayer {
+  position: relative;
+  z-index: 20;
+  isolation: isolate;
+  width: 100%;
+}
