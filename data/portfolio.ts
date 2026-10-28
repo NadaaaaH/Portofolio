@@ -46,6 +46,8 @@ export interface Project {
   architecture?: string[]; // Opsional: baris "Arsitektur" di modal hanya tampil jika diisi
   category: Exclude<Category, 'All'>;
   role: MultilingualText | string[];
+  /** Urutan prioritas tampilan (angka kecil = tampil lebih dulu; kosong/undefined = ditaruh setelah yang punya order, mengikuti urutan data asli) */
+  order?: number;
   preview?: ProjectPreview;
   links: { demo?: string; repo?: string };
   imagePublicId?: string; // Menyimpan publicId gambar utama (opsional fallback)
@@ -54,7 +56,41 @@ export interface Project {
   previewLabels: string[];
   media?: MediaItem[];
 }
-export const categories: Category[] = ['All', 'Web Development', 'UI/UX Design', 'Creative Works'];
+
+/** Batas maksimal card per kategori yang ditampilkan di tab "All" */
+export const ALL_TAB_LIMIT: Partial<Record<Category, number>> = {
+  'Web Development': 4,
+  'UI/UX Design': 2,
+  'Creative Works': 2,
+};
+
+export const DEFAULT_ALL_TAB_LIMIT = 2;
+
+/**
+ * Mengurutkan array project berdasarkan field `order` secara menaik (angka kecil lebih dulu).
+ * Project tanpa `order` (undefined) diletakkan di belakang dengan mempertahankan urutan data asli (stable sort).
+ * Menghasilkan salinan array baru tanpa memutasi array asli.
+ */
+export function sortProjects(items: Project[]): Project[] {
+  return [...items].sort((a, b) => {
+    const hasA = typeof a.order === 'number';
+    const hasB = typeof b.order === 'number';
+
+    if (hasA && hasB) {
+      return (a.order as number) - (b.order as number);
+    }
+    if (hasA && !hasB) return -1;
+    if (!hasA && hasB) return 1;
+    return 0;
+  });
+}
+
+// Toggle untuk menyembunyikan 'Creative Works' sementara selama dikembangkan di branch lain
+export const SHOW_CREATIVE_WORKS = false;
+
+export const categories: Category[] = SHOW_CREATIVE_WORKS
+  ? ['All', 'Web Development', 'UI/UX Design', 'Creative Works']
+  : ['All', 'Web Development', 'UI/UX Design'];
 export const cvUrl = 'https://google.com';
 export const copy = {
   foto: 'IMG_2219',
@@ -118,6 +154,7 @@ const originalProjects: Project[] = [
     architecture: ['AWS EC2', 'NeonDB', 'Cloudflare R2', 'Brevo'],
     category: 'Web Development',
     role: ['Fullstack Developer', 'System Analyst'],
+    order: 1,
     preview: {
       type: 'video',
       publicId: 'tumbuhberbagi-main',
@@ -157,30 +194,196 @@ const originalProjects: Project[] = [
     ],
   },
   {
-    id: 'fullstack-2',
+    id: 'webdev-2',
     title: {
-      id: 'E-Commerce Management & Analytics Dashboard',
-      en: 'E-Commerce Management & Analytics Dashboard',
+      id: 'ADIL: Platform Analisis & Deteksi Kemiripan Ide Lomba',
+      en: 'ADIL: Competition Idea Analysis & Similarity Detection Platform',
     },
     description: {
-      id: 'Aplikasi manajemen inventaris dan analitik penjualan real-time dengan visualisasi grafik interaktif, otentikasi peran pengguna, dan ekspor laporan PDF/Excel secara otomatis.',
-      en: 'Real-time inventory management and sales analytics application with interactive chart visualizations, user role authentication, and automated PDF/Excel report exports.',
+      id: 'Proyek ini dirancang untuk menganalisis ide kompetisi dan mengidentifikasi tingkat kemiripan dengan entri yang ada melalui perbandingan teks dan visual. Dalam proyek tim hackathon SIFest 2026 ini (Juara 4), aku bertanggung jawab merancang arsitektur sistem, menyiapkan sampel dataset ide dalam format JSON, serta mengimplementasikan logika utama deteksi kemiripan langsung di sisi browser berbasis React.\n\nSistem mendukung analisis ide berbasis teks, dokumen PDF, hingga poster kompetisi. Pipeline analisis teks menggabungkan metode TF-IDF, cosine similarity, keyphrase matching, dan semantic text embeddings. Sementara untuk poster visual, sistem memanfaatkan perceptual hashing, analisis tata letak spasial, warna, serta OCR. Aku juga mengintegrasikan Gemini API untuk mengekstrak konten ide secara otomatis dari dokumen PDF dengan format yang tidak konsisten, kemudian menghasilkan skor kemiripan dan kategori risiko secara instan.',
+      en: 'ADIL is a web platform designed to analyze competition ideas and identify similarities with existing entries through text and visual comparison. As part of a hackathon team at SIFest 2026 (4th Place), I was responsible for designing the system architecture, preparing a sample JSON dataset, and implementing the core browser-based similarity detection logic using React.\n\nThe system supports idea analysis from text inputs, PDF documents, and competition posters. Its text-analysis pipeline combines TF-IDF, cosine similarity, keyphrase matching, and semantic text embeddings, while poster analysis leverages perceptual hashing, spatial-layout analysis, color matching, and OCR. I also integrated the Gemini API to extract structured content from inconsistently formatted PDF files, generating automated similarity scores and risk categories.',
     },
-    stack: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Chart.js'],
+    stack: ['React', 'JavaScript', 'Tailwind CSS', 'Gemini API', 'Tesseract OCR'],
+    architecture: ['Vercel'],
     category: 'Web Development',
-    role: 'Web Developer',
+    role: ['System Analyst', 'Frontend Developer', 'Data Processing'],
+    order: 2,
     preview: {
       type: 'image',
-      publicId: 'FotoProfil',
+      publicId: 'adil-preview',
     },
-    links: { demo: 'https://google.com', repo: 'https://github.com' },
-    imagePublicId: 'FotoProfil', // ganti dengan publicId asli di Cloudinary
-    previewLabels: ['Web Application Interface', 'Backend API & Database Flow'],
+    links: { demo: 'https://adil-cyan.vercel.app/', repo: 'https://github.com' },
+    imagePublicId: 'adil-preview',
+    previewLabels: ['Similarity Analysis Engine', 'Text & Poster OCR Pipeline'],
     media: [
-      { type: 'image', publicId: 'FotoProfil' }, // ganti dengan publicId asli
-      { type: 'image', publicId: 'FotoProfil' },
-      { type: 'image', publicId: 'FotoProfil' },
-      { type: 'video', publicId: 'dog' },         // ganti dengan publicId asli
+      {
+        type: 'image',
+        publicId: 'adil-media-1',
+        caption: {
+          id: 'Antarmuka pengujian ide berbasis teks dan PDF dengan integrasi Gemini API untuk ekstraksi data terstruktur.',
+          en: 'Text and PDF analysis interface integrated with Gemini API for automated structured data extraction.',
+        },
+      },
+      {
+        type: 'image',
+        publicId: 'adil-media-2',
+        caption: {
+          id: 'Modul pemrosesan gambar poster menggunakan perceptual hashing dan OCR untuk mendeteksi kemiripan visual.',
+          en: 'Poster image processing module leveraging perceptual hashing and OCR to detect visual similarities.',
+        },
+      },
+      {
+        type: 'image',
+        publicId: 'adil-media-3',
+        caption: {
+          id: 'Hasil komparasi skor kemiripan dan pengkategorian risiko duplikasi karya secara real-time.',
+          en: 'Real-time similarity score breakdown and duplication risk categorization dashboard.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'webdev-3',
+    title: {
+      id: 'ProkerKita: Platform Eksplorasi Ide Program Kerja KKN',
+      en: 'ProkerKita: KKN Work Program Idea Platform',
+    },
+    description: {
+      id: 'Proyek kompetisi web design ini dikembangkan untuk membantu mahasiswa mengevaluasi, merencanakan, dan mengembangkan ide Program Kerja KKN berdasarkan kebutuhan lokal, anggaran, dan rekam jejak inisiatif sebelumnya. Pada proyek ini, aku berfokus pada pengembangan frontend berbasis React dengan menekankan antarmuka interaktif dan pengalaman visual yang intuitif.\n\nAku mengimplementasikan React dan GSAP untuk membangun antarmuka interaktif serta animasi halus yang mendukung visual storytelling. Sistem menerima input berupa ide program kerja, lokasi desa, estimasi anggaran, dan permasalahan utama daerah, lalu menampilkan preseden proyek relevan dan proyeksi dampaknya secara visual. Proyek ini dibangun sebagai prototipe frontend yang berfokus pada pengalaman pengguna yang responsif.',
+      en: 'Developed for a web design competition, ProkerKita enables students to evaluate and develop community service (KKN) program ideas based on local needs, budgets, and previous precedents. In this project, I focused on frontend development using React, emphasizing interactive user interfaces and engaging visual experiences.\n\nI integrated GSAP with React to create smooth animated interactions supporting visual storytelling. The platform processes user inputs—such as proposed work plans, village locations, budgets, and primary local issues—to surface relevant precedent programs and projected outcomes. Built as a high-fidelity frontend prototype, it prioritizes intuitive user interaction and responsive design.',
+    },
+    stack: ['React', 'JavaScript', 'GSAP', 'Tailwind CSS'],
+    architecture: ['Vercel'],
+    category: 'Web Development',
+    role: ['Frontend Developer', 'UI/UX Designer'],
+    preview: {
+      type: 'image',
+      publicId: 'prokerkita-preview',
+    },
+    links: { demo: 'https://prokerkita.vercel.app/', repo: 'https://github.com' },
+    imagePublicId: 'prokerkita-preview',
+    previewLabels: ['Interactive Program Matcher', 'GSAP Animated Interface'],
+    media: [
+      {
+        type: 'image',
+        publicId: 'prokerkita-media-1',
+        caption: {
+          id: 'Halaman eksplorasi program KKN berbasis peta interaktif dan filter kriteria kebutuhan desa.',
+          en: 'Interactive KKN program exploration page featuring location mapping and village requirement filters.',
+        },
+      },
+      {
+        type: 'image',
+        publicId: 'prokerkita-media-2',
+        caption: {
+          id: 'Formulir pengajuan ide program kerja dengan estimasi anggaran dan kalkulasi dampak dinamis.',
+          en: 'Work program proposal form with interactive budget estimation and dynamic impact calculation.',
+        },
+      },
+      {
+        type: 'image',
+        publicId: 'prokerkita-media-3',
+        caption: {
+          id: 'Antarmuka visualisasi rekam jejak program KKN terdahulu sebagai materi pertimbangan ide.',
+          en: 'Visual archive interface showcasing past KKN initiatives for program evaluation and precedent analysis.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'webdev-4',
+    title: {
+      id: 'KerjaAsyik: Platform Pendeteksi Loker Palsu & Estimasi Gaji',
+      en: 'KerjaAsyik: Job Scam Checker & Salary Estimation Platform',
+    },
+    description: {
+      id: 'Proyek kompetisi web design Techsoft (Juara 2) ini dirancang sebagai platform terpadu untuk membantu pencari kerja mengidentifikasi potensi penipuan lowongan kerja (job scam) dan mengeksplorasi estimasi gaji secara transparan. Aku berkontribusi pada pengembangan frontend berbasis React, berfokus pada perancangan antarmuka serta pengalaman interaktif pengguna.\n\nMelalui platform ini, pengguna dapat memeriksa keabsahan suatu lowongan pekerjaan serta mengeksplorasi data estimasi gaji sesuai industri dan posisi untuk mengambil keputusan karir yang lebih aman. Proyek ini dibangun sebagai prototipe frontend interaktif yang berorientasi pada kepraktisan akses informasi dan kejelasan user flow.',
+      en: 'Developed for the Techsoft Web Design Competition (2nd Place Winner), KerjaAsyik is a unified frontend platform designed to help job seekers detect fraudulent job postings and explore salary estimates. I contributed as a React frontend developer, focusing on crafting clean user interfaces and interactive user flows.\n\nThe platform enables users to evaluate job vacancy authenticity and cross-reference salary benchmarks across roles and industries, empowering safer career decision-making. It was engineered as a high-fidelity frontend prototype emphasizing clarity, speed, and intuitive navigation.',
+    },
+    stack: ['React', 'JavaScript', 'Tailwind CSS'],
+    architecture: ['Vercel'],
+    category: 'Web Development',
+    role: ['Frontend Developer'],
+    preview: {
+      type: 'image',
+      publicId: 'kerjaasyik-preview',
+    },
+    links: { demo: 'https://kerjaasyikks.vercel.app/', repo: 'https://github.com' },
+    imagePublicId: 'kerjaasyik-preview',
+    previewLabels: ['Job Scam Checker UI', 'Salary Estimation Dashboard'],
+    media: [
+      {
+        type: 'image',
+        publicId: 'kerjaasyik-media-1',
+        caption: {
+          id: 'Modul pengecekan keaslian lowongan kerja berbasis indikator risiko penipuan.',
+          en: 'Job vacancy validation module designed to evaluate risk indicators for potential employment scams.',
+        },
+      },
+      {
+        type: 'image',
+        publicId: 'kerjaasyik-media-2',
+        caption: {
+          id: 'Fitur kalkulator dan pembanding estimasi rerata gaji berdasarkan posisi dan industri.',
+          en: 'Interactive salary benchmark calculator and comparison tool across job roles and industry sectors.',
+        },
+      },
+      {
+        type: 'image',
+        publicId: 'kerjaasyik-media-3',
+        caption: {
+          id: 'Tampilan panduan panduan keamanan melamar kerja dan pelaporan indikasi loker bodong.',
+          en: 'Job safety guide and reporting workflow interface for suspicious job postings.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'fullstack-2',
+    title: {
+      id: 'ReCircle: Marketplace Barang Bekas Mahasiswa Indekos',
+      en: 'ReCircle: Preloved Marketplace for Boarding House Students',
+    },
+    description: {
+      id: 'Proyek akademik perkuliahan ini dikembangkan untuk memfasilitasi transaksi jual-beli barang bekas layak pakai antar mahasiswa indekos secara praktis dan aman. Dalam tim beranggota 4 orang (divisi web & mobile), aku menjadi bagian dari tim web 2 orang yang bertanggung jawab membangun frontend dan backend menggunakan React dan Laravel.\n\nFokus kontribusiku terletak pada pengembangan panel admin, pengujian kualitas sistem (quality assurance), perancangan alur integrasi API, serta deployment web. Aku mengelola database MySQL, integrasi penyimpanan media via Cloudinary, serta mempublikasikan aplikasi web berbasis React di Vercel. Platform mencakup fitur marketplace penjual/pembeli, transaksi pembayaran, fitur live, serta obrolan antar pengguna (user chat).',
+      en: 'Developed as a campus group project, ReCircle is a web and mobile marketplace platform designed for boarding house students to buy and sell preloved items. As part of a two-member web team within a four-person group, I contributed to both frontend and backend development using React and Laravel.\n\nMy primary responsibilities included building the administrative suite, conducting quality assurance, integrating APIs, and managing cloud web deployment. I designed MySQL database operations, configured Cloudinary media storage, and hosted the React frontend on Vercel. Features include buyer/seller marketplace flows, payment processing, live updates, and direct user messaging.',
+    },
+    stack: ['Laravel', 'React', 'PHP', 'JavaScript', 'MySQL', 'Tailwind CSS'],
+    architecture: ['Vercel', 'Cloudinary', 'MySQL Host'],
+    category: 'Web Development',
+    role: ['Fullstack Developer', 'Backend Developer', 'QA & Deployment'],
+    preview: {
+      type: 'image',
+      publicId: 'recircle-preview',
+    },
+    links: { demo: 'https://github.com', repo: 'https://github.com' },
+    imagePublicId: 'recircle-preview',
+    previewLabels: ['Marketplace & Chat Flow', 'Admin Management Panel'],
+    media: [
+      {
+        type: 'image',
+        publicId: 'recircle-media-1',
+        caption: {
+          id: 'Katalog marketplace produk bekas mahasiswa dilengkapi filter harga dan opsi komunikasi penjual.',
+          en: 'Student preloved product catalog featuring price filters and direct seller contact options.',
+        },
+      },
+      {
+        type: 'image',
+        publicId: 'recircle-media-2',
+        caption: {
+          id: 'Dashboard admin untuk pengawasan transaksi, verifikasi barang, dan manajemen pengguna.',
+          en: 'Admin dashboard for transaction oversight, item verification, and platform user management.',
+        },
+      },
+      {
+        type: 'image',
+        publicId: 'recircle-media-3',
+        caption: {
+          id: 'Fitur percakapan langsung (live chat) dan alur alur alur checkout pembayaran interaktif.',
+          en: 'Live user messaging interface and integrated checkout payment flow.',
+        },
+      },
     ],
   },
   {
@@ -341,9 +544,12 @@ const originalProjects: Project[] = [
     previewLabels: ['Reels 1', 'Reels 2', 'Reels 3'],
   },
 ];
-export const projects: Project[] = originalProjects;
+export const projects: Project[] = SHOW_CREATIVE_WORKS
+  ? originalProjects
+  : originalProjects.filter(p => p.category !== 'Creative Works');
 export function filterProjects(category: Category) {
-  return projects.filter(p => category === 'All' || p.category === category);
+  const list = projects.filter(p => category === 'All' || p.category === category);
+  return sortProjects(list);
 }
 export interface Achievement {
   id: number;

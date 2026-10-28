@@ -7,10 +7,13 @@ import { ProjectCard } from '@/components/diary/ProjectCard';
 import { SectionTitle } from '@/components/diary/SectionTitle';
 import styles from './WorkSection.module.css';
 import {
+  ALL_TAB_LIMIT,
+  DEFAULT_ALL_TAB_LIMIT,
   categories,
   copy,
   filterProjects,
   projects,
+  sortProjects,
   type Category,
   type Language,
   type Project,
@@ -48,9 +51,17 @@ export function WorkSection({
     return () => observer.disconnect();
   }, []);
 
-  const webDev = projects.filter(p => p.category === 'Web Development');
-  const ux = projects.filter(p => p.category === 'UI/UX Design');
-  const creative = projects.filter(p => p.category === 'Creative Works');
+  const webDevLimit = ALL_TAB_LIMIT['Web Development'] ?? DEFAULT_ALL_TAB_LIMIT;
+  const uxLimit = ALL_TAB_LIMIT['UI/UX Design'] ?? DEFAULT_ALL_TAB_LIMIT;
+  const creativeLimit = ALL_TAB_LIMIT['Creative Works'] ?? DEFAULT_ALL_TAB_LIMIT;
+
+  const webDev = sortProjects(projects.filter(p => p.category === 'Web Development'));
+  const ux = sortProjects(projects.filter(p => p.category === 'UI/UX Design'));
+  const creative = sortProjects(projects.filter(p => p.category === 'Creative Works'));
+
+  const visibleWebDev = webDev.slice(0, webDevLimit);
+  const visibleUx = ux.slice(0, uxLimit);
+  const visibleCreative = creative.slice(0, creativeLimit);
 
   const renderCard = (p: Project) => (
     <ProjectCard key={p.id} project={p} language={language} onOpen={onOpenProject} />
@@ -100,36 +111,44 @@ export function WorkSection({
                 <Paperclip size={22} className="inline-block" style={{ marginLeft: '8px' }} aria-hidden="true" />
               </h3>
               <div className="project-grid">
-                {webDev.map((p) => renderCard(p))}
+                {visibleWebDev.map((p) => renderCard(p))}
               </div>
-              <div className="more-row">
-                <Button variant="link" onClick={() => onCategoryChange('Web Development')}>
-                  {t.more}<ArrowUpRight />
-                </Button>
-              </div>
+              {webDev.length > webDevLimit && (
+                <div className="more-row">
+                  <Button variant="link" onClick={() => onCategoryChange('Web Development')}>
+                    {t.more}<ArrowUpRight />
+                  </Button>
+                </div>
+              )}
             </div>
             <div className="category-group">
               <h3 className="category-subtitle">UI/UX Design</h3>
               <div className="project-grid">
-                {ux.map((p) => renderCard(p))}
+                {visibleUx.map((p) => renderCard(p))}
               </div>
-              <div className="more-row">
-                <Button variant="link" onClick={() => onCategoryChange('UI/UX Design')}>
-                  {t.more}<ArrowUpRight />
-                </Button>
-              </div>
+              {ux.length > uxLimit && (
+                <div className="more-row">
+                  <Button variant="link" onClick={() => onCategoryChange('UI/UX Design')}>
+                    {t.more}<ArrowUpRight />
+                  </Button>
+                </div>
+              )}
             </div>
-            <div className="category-group">
-              <h3 className="category-subtitle">Creative Works</h3>
-              <div className="project-grid">
-                {creative.filter(p => p.id === 'creative-0' || p.id === 'creative-3').map(p => renderCard(p))}
+            {creative.length > 0 && (
+              <div className="category-group">
+                <h3 className="category-subtitle">Creative Works</h3>
+                <div className="project-grid">
+                  {visibleCreative.map((p) => renderCard(p))}
+                </div>
+                {creative.length > creativeLimit && (
+                  <div className="more-row">
+                    <Button variant="link" onClick={() => onCategoryChange('Creative Works')}>
+                      {t.more}<ArrowUpRight />
+                    </Button>
+                  </div>
+                )}
               </div>
-              <div className="more-row">
-                <Button variant="link" onClick={() => onCategoryChange('Creative Works')}>
-                  {t.more}<ArrowUpRight />
-                </Button>
-              </div>
-            </div>
+            )}
           </>
         ) : (
           groups.map(group => (
