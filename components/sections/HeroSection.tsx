@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { ArrowDownRight, ArrowUpRight, FileText, Star } from 'lucide-react';
 import { RansomText } from '@/components/diary/RansomText';
@@ -49,21 +49,23 @@ export function HeroSection({ language }: HeroSectionProps) {
         </div>
       </div>
       <div className="hero-photo-area reveal">
-        <div className="photo-back" aria-hidden="true" />
-        <div className="hero-polaroid polaroid relative">
-          <Tape />
-          <span className="paper-clip" aria-hidden="true" />
-          <CloudinaryImage
-            publicId={copy.foto}
-            alt="Nada Haifa Nurfadhilah"
-            width={640}
-            onError={e => {
-              e.currentTarget.src = 'f.foto';
-            }}
-          />
-          <p className="photo-caption">Let's Get In Touch {'\u2661'}</p>
-          <Spark className="hero-spark absolute left-63 top-10" />
-          <Flower className="hero-flower" />
+        <div className="hero-photo-frame">
+          <div className="photo-back" aria-hidden="true" />
+          <div className="hero-polaroid polaroid relative">
+            <Tape />
+            <span className="paper-clip" aria-hidden="true" />
+            <CloudinaryImage
+              publicId={copy.foto}
+              alt="Nada Haifa Nurfadhilah"
+              width={640}
+              onError={e => {
+                e.currentTarget.src = 'f.foto';
+              }}
+            />
+            <p className="photo-caption">Let's Get In Touch {'\u2661'}</p>
+            <Spark className="hero-spark absolute left-63 top-10" />
+            <Flower className="hero-flower" />
+          </div>
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <span className="photo-annotation small-annotation">

@@ -303,10 +303,35 @@
   visibility: hidden;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
+  .workWrapper {
+    --torn-polygon: polygon(
+      0% 12px,
+      12% 12px,
+      18% 10px,
+      24% 6px,
+      30% 9px,
+      36% 14px,
+      42% 16px,
+      48% 12px,
+      54% 11px,
+      62% 11px,
+      68% 8px,
+      74% 6px,
+      80% 10px,
+      86% 14px,
+      92% 13px,
+      100% 13px,
+      100% 100%,
+      0% 100%
+    );
+  }
+
   .workBand {
     scroll-margin-top: 140px;
+    padding-top: 36px;
   }
+
   .stickyHeader {
     padding-top: 6px;
   }

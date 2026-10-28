@@ -21,6 +21,7 @@ export function Navbar({ language, onLanguageChange }: NavbarProps) {
       </a>
       <div className="nav-actions">
         <HoverButton
+          className="nav-cv"
           icon={<FileText size={16} />}
           trailingIcon={<ArrowUpRight size={16} />}
           href={cvUrl}

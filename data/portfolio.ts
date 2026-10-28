@@ -160,7 +160,7 @@ const originalProjects: Project[] = [
       publicId: 'tumbuhberbagi-main',
       autoplay: true,
     },
-    links: { demo: 'https://tumbuhberbagi.duckdns.org/', repo: 'https://github.com' },
+    links: { demo: 'https://tumbuhberbagi.duckdns.org/', repo: 'https://github.com/NadaaaaH/TumbuhBerbagi' },
     imagePublicId: 'Screenshot_2026-10-18_211137',
     previewLabels: ['Web Application Interface', 'Backend API & Database Flow'],
     media: [
@@ -203,41 +203,35 @@ const originalProjects: Project[] = [
       id: 'Proyek ini dirancang untuk menganalisis ide kompetisi dan mengidentifikasi tingkat kemiripan dengan entri yang ada melalui perbandingan teks dan visual. Dalam proyek tim hackathon SIFest 2026 ini (Juara 4), aku bertanggung jawab merancang arsitektur sistem, menyiapkan sampel dataset ide dalam format JSON, serta mengimplementasikan logika utama deteksi kemiripan langsung di sisi browser berbasis React.\n\nSistem mendukung analisis ide berbasis teks, dokumen PDF, hingga poster kompetisi. Pipeline analisis teks menggabungkan metode TF-IDF, cosine similarity, keyphrase matching, dan semantic text embeddings. Sementara untuk poster visual, sistem memanfaatkan perceptual hashing, analisis tata letak spasial, warna, serta OCR. Aku juga mengintegrasikan Gemini API untuk mengekstrak konten ide secara otomatis dari dokumen PDF dengan format yang tidak konsisten, kemudian menghasilkan skor kemiripan dan kategori risiko secara instan.',
       en: 'ADIL is a web platform designed to analyze competition ideas and identify similarities with existing entries through text and visual comparison. As part of a hackathon team at SIFest 2026 (4th Place), I was responsible for designing the system architecture, preparing a sample JSON dataset, and implementing the core browser-based similarity detection logic using React.\n\nThe system supports idea analysis from text inputs, PDF documents, and competition posters. Its text-analysis pipeline combines TF-IDF, cosine similarity, keyphrase matching, and semantic text embeddings, while poster analysis leverages perceptual hashing, spatial-layout analysis, color matching, and OCR. I also integrated the Gemini API to extract structured content from inconsistently formatted PDF files, generating automated similarity scores and risk categories.',
     },
-    stack: ['React', 'JavaScript', 'Tailwind CSS', 'Gemini API', 'Tesseract OCR'],
-    architecture: ['Vercel'],
+    stack: ['React', 'TypeScript', 'Tailwind CSS', 'Transformers.js', 'Tesseract.js', 'PDF.js'],
+    architecture: ['Vercel', 'Gemini API'],
     category: 'Web Development',
-    role: ['System Analyst', 'Frontend Developer', 'Data Processing'],
+    role: ['Software Developer', 'System Analyst', 'Data Processing'],
     order: 2,
     preview: {
-      type: 'image',
-      publicId: 'adil-preview',
+      type: 'video',
+      publicId: 'adim-main',
+      autoplay: true,
     },
-    links: { demo: 'https://adil-cyan.vercel.app/', repo: 'https://github.com' },
+    links: { demo: 'https://adil-cyan.vercel.app/', repo: 'https://github.com/dounfi/adil' },
     imagePublicId: 'adil-preview',
     previewLabels: ['Similarity Analysis Engine', 'Text & Poster OCR Pipeline'],
     media: [
       {
-        type: 'image',
-        publicId: 'adil-media-1',
+        type: 'video',
+        publicId: 'adil-fitur',
+        autoplay: true,
         caption: {
-          id: 'Antarmuka pengujian ide berbasis teks dan PDF dengan integrasi Gemini API untuk ekstraksi data terstruktur.',
-          en: 'Text and PDF analysis interface integrated with Gemini API for automated structured data extraction.',
+          id: 'Pengujian ide berbasis input teks, gambar poster, serta dokumen PDF yang di-extract konteksnya secara otomatis via Gemini API.',
+          en: 'Idea checker supporting direct text, poster images, and PDF document uploads with automated context extraction via Gemini API.',
         },
       },
       {
         type: 'image',
-        publicId: 'adil-media-2',
+        publicId: 'Screenshot_2026-10-23_224228',
         caption: {
           id: 'Modul pemrosesan gambar poster menggunakan perceptual hashing dan OCR untuk mendeteksi kemiripan visual.',
           en: 'Poster image processing module leveraging perceptual hashing and OCR to detect visual similarities.',
-        },
-      },
-      {
-        type: 'image',
-        publicId: 'adil-media-3',
-        caption: {
-          id: 'Hasil komparasi skor kemiripan dan pengkategorian risiko duplikasi karya secara real-time.',
-          en: 'Real-time similarity score breakdown and duplication risk categorization dashboard.',
         },
       },
     ],
@@ -249,43 +243,45 @@ const originalProjects: Project[] = [
       en: 'ProkerKita: KKN Work Program Idea Platform',
     },
     description: {
-      id: 'Proyek kompetisi web design ini dikembangkan untuk membantu mahasiswa mengevaluasi, merencanakan, dan mengembangkan ide Program Kerja KKN berdasarkan kebutuhan lokal, anggaran, dan rekam jejak inisiatif sebelumnya. Pada proyek ini, aku berfokus pada pengembangan frontend berbasis React dengan menekankan antarmuka interaktif dan pengalaman visual yang intuitif.\n\nAku mengimplementasikan React dan GSAP untuk membangun antarmuka interaktif serta animasi halus yang mendukung visual storytelling. Sistem menerima input berupa ide program kerja, lokasi desa, estimasi anggaran, dan permasalahan utama daerah, lalu menampilkan preseden proyek relevan dan proyeksi dampaknya secara visual. Proyek ini dibangun sebagai prototipe frontend yang berfokus pada pengalaman pengguna yang responsif.',
-      en: 'Developed for a web design competition, ProkerKita enables students to evaluate and develop community service (KKN) program ideas based on local needs, budgets, and previous precedents. In this project, I focused on frontend development using React, emphasizing interactive user interfaces and engaging visual experiences.\n\nI integrated GSAP with React to create smooth animated interactions supporting visual storytelling. The platform processes user inputs—such as proposed work plans, village locations, budgets, and primary local issues—to surface relevant precedent programs and projected outcomes. Built as a high-fidelity frontend prototype, it prioritizes intuitive user interaction and responsive design.',
+      id: 'Proyek kompetisi web design (frontend only) ini dikembangkan untuk membantu mahasiswa mengevaluasi, merencanakan, dan mengembangkan ide Program Kerja KKN berdasarkan kebutuhan lokal, anggaran, dan rekam jejak inisiatif sebelumnya. Pada proyek ini, aku berfokus pada pengembangan frontend berbasis React dengan menekankan antarmuka interaktif dan pengalaman visual yang intuitif.\n\nAku mengimplementasikan React dan GSAP untuk membangun antarmuka interaktif serta animasi halus yang mendukung visual storytelling. Sistem menerima input berupa ide program kerja, lokasi desa, estimasi anggaran, dan permasalahan utama daerah, lalu menampilkan preseden proyek relevan dan proyeksi dampaknya secara visual. Proyek ini dibangun sebagai prototipe frontend yang berfokus pada pengalaman pengguna yang responsif.',
+      en: 'Developed for a web design competition (frontend only), ProkerKita enables students to evaluate and develop community service (KKN) program ideas based on local needs, budgets, and previous precedents. In this project, I focused on frontend development using React, emphasizing interactive user interfaces and engaging visual experiences.\n\nI integrated GSAP with React to create smooth animated interactions supporting visual storytelling. The platform processes user inputs—such as proposed work plans, village locations, budgets, and primary local issues—to surface relevant precedent programs and projected outcomes. Built as a high-fidelity frontend prototype, it prioritizes intuitive user interaction and responsive design.',
     },
-    stack: ['React', 'JavaScript', 'GSAP', 'Tailwind CSS'],
-    architecture: ['Vercel'],
+    stack: [
+      'React 19',
+      'TypeScript',
+      'TanStack Start',
+      'Tailwind CSS v4',
+      'GSAP',
+      'Framer Motion',
+      'Zod',
+      'Recharts',
+    ],
+    architecture: ['TanStack Start (SSR)', 'Nitro Engine', 'Vercel'],
     category: 'Web Development',
-    role: ['Frontend Developer', 'UI/UX Designer'],
+    role: ['Frontend Developer'],
     preview: {
-      type: 'image',
-      publicId: 'prokerkita-preview',
+      type: 'video',
+      publicId: 'prokerkita',
+      autoplay: true,
     },
-    links: { demo: 'https://prokerkita.vercel.app/', repo: 'https://github.com' },
+    links: { demo: 'https://prokerkita.vercel.app/', repo: 'https://github.com/NadaaaaH/ProkerKita' },
     imagePublicId: 'prokerkita-preview',
     previewLabels: ['Interactive Program Matcher', 'GSAP Animated Interface'],
     media: [
       {
         type: 'image',
-        publicId: 'prokerkita-media-1',
+        publicId: 'Screenshot_2026-10-23_224544',
+        caption: {
+          id: 'Antarmuka utama untuk mengevaluasi, merencanakan, dan mengembangkan ide Program Kerja KKN berdasarkan kebutuhan lokal dan estimasi anggaran.',
+          en: 'Main interface for evaluating, planning, and developing KKN work program ideas based on local needs and budget estimates.',
+        },
+      },
+      {
+        type: 'image',
+        publicId: 'Screenshot_2026-10-23_224603',
         caption: {
           id: 'Halaman eksplorasi program KKN berbasis peta interaktif dan filter kriteria kebutuhan desa.',
           en: 'Interactive KKN program exploration page featuring location mapping and village requirement filters.',
-        },
-      },
-      {
-        type: 'image',
-        publicId: 'prokerkita-media-2',
-        caption: {
-          id: 'Formulir pengajuan ide program kerja dengan estimasi anggaran dan kalkulasi dampak dinamis.',
-          en: 'Work program proposal form with interactive budget estimation and dynamic impact calculation.',
-        },
-      },
-      {
-        type: 'image',
-        publicId: 'prokerkita-media-3',
-        caption: {
-          id: 'Antarmuka visualisasi rekam jejak program KKN terdahulu sebagai materi pertimbangan ide.',
-          en: 'Visual archive interface showcasing past KKN initiatives for program evaluation and precedent analysis.',
         },
       },
     ],
@@ -300,42 +296,43 @@ const originalProjects: Project[] = [
       id: 'Proyek kompetisi web design Techsoft (Juara 2) ini dirancang sebagai platform terpadu untuk membantu pencari kerja mengidentifikasi potensi penipuan lowongan kerja (job scam) dan mengeksplorasi estimasi gaji secara transparan. Aku berkontribusi pada pengembangan frontend berbasis React, berfokus pada perancangan antarmuka serta pengalaman interaktif pengguna.\n\nMelalui platform ini, pengguna dapat memeriksa keabsahan suatu lowongan pekerjaan serta mengeksplorasi data estimasi gaji sesuai industri dan posisi untuk mengambil keputusan karir yang lebih aman. Proyek ini dibangun sebagai prototipe frontend interaktif yang berorientasi pada kepraktisan akses informasi dan kejelasan user flow.',
       en: 'Developed for the Techsoft Web Design Competition (2nd Place Winner), KerjaAsyik is a unified frontend platform designed to help job seekers detect fraudulent job postings and explore salary estimates. I contributed as a React frontend developer, focusing on crafting clean user interfaces and interactive user flows.\n\nThe platform enables users to evaluate job vacancy authenticity and cross-reference salary benchmarks across roles and industries, empowering safer career decision-making. It was engineered as a high-fidelity frontend prototype emphasizing clarity, speed, and intuitive navigation.',
     },
-    stack: ['React', 'JavaScript', 'Tailwind CSS'],
+    stack: [
+      'React',
+      'TypeScript',
+      'Tailwind CSS',
+      'Three.js',
+      'Framer Motion',
+      'Radix UI',
+    ],
     architecture: ['Vercel'],
     category: 'Web Development',
     role: ['Frontend Developer'],
     preview: {
-      type: 'image',
-      publicId: 'kerjaasyik-preview',
+      type: 'video',
+      publicId: 'kejasyik',
+      autoplay: true,
     },
-    links: { demo: 'https://kerjaasyikks.vercel.app/', repo: 'https://github.com' },
+    links: { demo: 'https://kerjaasyikks.vercel.app/', repo: 'https://github.com/NadaaaaH/KerjAsyk' },
     imagePublicId: 'kerjaasyik-preview',
     previewLabels: ['Job Scam Checker UI', 'Salary Estimation Dashboard'],
     media: [
       {
         type: 'image',
-        publicId: 'kerjaasyik-media-1',
+        publicId: 'Screenshot_2026-10-23_225056',
         caption: {
-          id: 'Modul pengecekan keaslian lowongan kerja berbasis indikator risiko penipuan.',
-          en: 'Job vacancy validation module designed to evaluate risk indicators for potential employment scams.',
+          id: 'Design antarmuka kalkulator dan pembanding estimasi rerata gaji berdasarkan posisi dan industri.',
+          en: 'Design Interactive salary benchmark calculator and comparison tool across job roles and industry sectors.',
         },
       },
       {
         type: 'image',
-        publicId: 'kerjaasyik-media-2',
+        publicId: 'Screenshot_2026-10-23_225121',
         caption: {
-          id: 'Fitur kalkulator dan pembanding estimasi rerata gaji berdasarkan posisi dan industri.',
-          en: 'Interactive salary benchmark calculator and comparison tool across job roles and industry sectors.',
+          id: 'Design antarmuka modul pengecekan keaslian lowongan kerja berbasis indikator risiko penipuan.',
+          en: 'Design Job vacancy validation module designed to evaluate risk indicators for potential employment scams.',
         },
       },
-      {
-        type: 'image',
-        publicId: 'kerjaasyik-media-3',
-        caption: {
-          id: 'Tampilan panduan panduan keamanan melamar kerja dan pelaporan indikasi loker bodong.',
-          en: 'Job safety guide and reporting workflow interface for suspicious job postings.',
-        },
-      },
+
     ],
   },
   {
@@ -351,12 +348,12 @@ const originalProjects: Project[] = [
     stack: ['Laravel', 'React', 'PHP', 'JavaScript', 'MySQL', 'Tailwind CSS'],
     architecture: ['Vercel', 'Cloudinary', 'MySQL Host'],
     category: 'Web Development',
-    role: ['Fullstack Developer', 'Backend Developer', 'QA & Deployment'],
+    role: ['Web Developer', 'Quality Assurance'],
     preview: {
       type: 'image',
       publicId: 'recircle-preview',
     },
-    links: { demo: 'https://github.com', repo: 'https://github.com' },
+    links: { demo: 'https://frontend-recircle-seven.vercel.app/', repo: 'https://github.com/NadaaaaH/frontend-recircle' },
     imagePublicId: 'recircle-preview',
     previewLabels: ['Marketplace & Chat Flow', 'Admin Management Panel'],
     media: [
@@ -389,38 +386,37 @@ const originalProjects: Project[] = [
   {
     id: 'uiux-1',
     title: {
-      id: 'Design Website Games For Kids Called Mentari',
-      en: 'Design Website Games For Kids Called Mentari',
+      id: 'Jejak Bumi: Perancangan UI/UX Aplikasi Gamifikasi Misi Lingkungan',
+      en: 'Jejak Bumi: Gamified Eco-Mission Mobile App UI/UX Design',
     },
     description: {
-      id: 'Perancangan UI/UX game interaktif untuk anak-anak dengan pendekatan elemen visual bertema ramah anak, warna-warna lembut yang riang, serta pengujian kemudahan navigasi bagi usia dini.',
-      en: 'Interactive UI/UX design for kids educational games featuring child-friendly visuals, soft cheerful colors, and early-age usability navigation testing.',
+      id: 'Jejak Bumi adalah konsep perancangan UI/UX aplikasi mobile berbasis gamifikasi yang dirancang untuk mendorong kebiasaan hidup ramah lingkungan secara interaktif. Aplikasi ini memotivasi pengguna untuk menyelesaikan berbagai misi hijau harian (seperti pemilahan sampah, daur ulang, dan penghematan energi) untuk mengumpulkan poin yang dapat ditukarkan dengan hadiah atau produk ramah lingkungan.\n\nDalam proyek kompetisi desain ini, aku bertindak sebagai UI/UX Designer yang bertanggung jawab penuh atas keseluruhan proses desain dari awal hingga akhir. Aku menyusun user flow dan wireframe, merancang design system bertema alam yang intuitif dan ramah pengguna, serta membangun high-fidelity interactive prototype di Figma. Fokus perancangan berada pada kemudahan navigasi, visual mikro-interaksi yang menarik, serta arsitektur informasi yang mendukung retensi pengguna dalam menyelesaikan misi.',
+      en: 'Jejak Bumi is a gamified mobile app UI/UX design concept created to encourage sustainable lifestyle habits through interactive engagement. The platform motivates users to complete daily green missions—such as waste sorting, recycling, and energy conservation—earning reward points redeemable for eco-friendly products.\n\nAs the UI/UX Designer for this competition project, I led the end-to-end design process. I developed user flows and wireframes, crafted a nature-inspired intuitive design system, and built a high-fidelity interactive prototype in Figma. The design focuses on seamless navigation, engaging micro-interactions, and an information architecture tailored to sustain long-term user retention.',
     },
-    stack: ['Figma', 'Canva', 'Adobe XD'],
+    stack: ['Figma',],
     category: 'UI/UX Design',
     role: 'UI/UX Designer',
+    preview: {
+      type: 'image',
+      publicId: 'Tanpa_judul_Presentasi',
+      autoplay: true,
+    },
     links: { demo: 'https://figma.com' },
     previewLabels: ['Desktop UI Wireframe & Prototype', 'Mobile UI Screens Showcase'],
-  },
-  {
-    id: 'uiux-2',
-    title: {
-      id: 'Design Mobile App E-Commerce Aesthetic',
-      en: 'Design Mobile App E-Commerce Aesthetic',
-    },
-    description: {
-      id: 'Perancangan pengalaman pengguna (UX) dan antarmuka (UI) aplikasi seluler belanja online bertema estetika minimalis dengan alur pemesanan produk yang sangat cepat dan intuitif.',
-      en: 'UI/UX design for a minimalist aesthetic online shopping mobile application with an intuitive and swift product ordering flow.',
-    },
-    stack: ['Figma', 'Protopie', 'Illustrator'],
-    category: 'UI/UX Design',
-    role: 'UI/UX Designer',
-    links: { demo: 'https://figma.com' },
-    previewLabels: ['Desktop UI Wireframe & Prototype', 'Mobile UI Screens Showcase'],
+    media: [
+      {
+        type: 'image',
+        publicId: 'download_13',
+        caption: {
+          id: 'Tampilan antarmuka katalog Misi Hijau harian dengan filter kategori aktivitas lingkungan, tingkat kesulitan, serta estimasi perolehan poin.',
+          en: 'Daily Green Mission catalog interface featuring environmental activity filters, difficulty levels, and estimated point rewards.',
+        },
+      },
+    ]
   },
   /*
   '''
-  {
+  {download_13
     id: 'writing-0',
     title: 'Moonlit Full',
     group: 'Fiction Writing',

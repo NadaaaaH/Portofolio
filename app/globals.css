@@ -511,6 +511,11 @@
   perspective: 1000px;
 }
 
+.hero-photo-frame {
+  position: relative;
+  width: 100%;
+}
+
 .polaroid {
   background: var(--card);
   padding: 14px 14px 20px;
@@ -1959,114 +1964,217 @@
   }
 }
 
-@media(max-width:640px) {
+@media(max-width:767px) {
   .navbar {
-    min-height: 77px;
+    min-height: 60px;
+    padding-top: calc(8px + env(safe-area-inset-top, 0px));
+    padding-inline: 14px;
   }
 
   .brand-label {
-    font-size: 23px;
-    gap: 5px;
+    font-size: 21px;
+    gap: 6px;
   }
 
   .brand-label svg {
     width: 18px;
+    height: 18px;
   }
 
+  /* Geser container tombol header agar tidak bertabrakan dengan switcher bahasa fixed */
   .nav-actions {
-    gap: 9px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 76px;
   }
 
+  /* Tombol Lihat CV di header tetap di aliran header, tidak fixed */
   .nav-cv {
-    display: none;
+    display: inline-flex;
+    font-size: 12px;
+    height: 33px;
+    padding: 0 10px;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  /* ── 3. Switcher Bahasa (ID/EN) FIXED di pojok kanan atas ── */
+  .language-switch {
+    position: fixed;
+    top: calc(12px + env(safe-area-inset-top, 0px));
+    right: calc(14px + env(safe-area-inset-right, 0px));
+    z-index: 999;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+    padding: 2px;
   }
 
   .language-button {
-    padding: 0 10px;
+    padding: 0 9px;
+    height: 28px;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+
+  /* ── Pita PORTOFOLIO: ukuran normal di mobile, tidak mengecil ── */
+  .hero-zone {
+    --ribbon-h: 70px;
+    --ribbon-gap-above: -10px;
+    --ribbon-gap-below: 24px;
+    --ribbon-tilt: 1.5deg;
+    overflow-x: clip;
   }
 
   .washi-marquee-wave {
-    /* top dan transform tetap sama; tidak perlu override */
+    width: auto;
+    left: 50%;
+    transform: translateX(-50%) rotate(var(--ribbon-tilt, 1.5deg));
   }
 
   .wave-svg {
-    /* Sesuaikan token ribbon di hero-zone untuk mobile */
+    width: auto;
+    height: 135px;
+    max-width: none;
   }
 
-  .hero-zone {
-    --ribbon-h: clamp(48px, 14vw, 80px);
-    --ribbon-gap-above: 10px;
-    /* proporsional: lebih kecil dari desktop -35px */
-    --ribbon-gap-below: 0px;
-  }
-
+  /* ── 1. Urutan hero vertikal revisi: pita -> sapaan+nama -> foto -> kartu -> tombol -> anotasi ── */
   .hero {
-    grid-template-columns: 1fr;
-    gap: 33px;
-    padding-bottom: 56px;
-    /* padding-top dihitung ulang otomatis dari token yang sudah di-override di .hero-zone */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding-top: calc(var(--ribbon-h, 70px) + var(--ribbon-gap-above, -10px) + var(--ribbon-gap-below, 24px));
+    padding-bottom: 48px;
+  }
+
+  .hero-copy,
+  .hero-photo-area {
+    display: contents;
+    animation: none;
+  }
+
+  /* Posisi 1 (di bawah pita): Sapaan "Hai, aku Nada!" (center) */
+  .hello-label {
+    order: 1;
+    font-size: 22px;
+    margin: 0 auto 8px;
+    text-align: center;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Posisi 1 lanjutan: Nama ransom rata tengah */
+  .hero h1 {
+    order: 2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 0 0 16px;
   }
 
   .hero-name {
+    --hero-ransom-size: clamp(21px, 6vw, 28px);
     font-size: var(--hero-ransom-size);
     max-width: 100%;
+    align-items: center;
+    width: 100%;
   }
 
-  .hello-label {
-    font-size: 23px;
+  .hero-name .ransom-line {
+    justify-content: center;
+    width: 100%;
   }
 
+  /* Posisi 2: Foto polaroid lebih kecil (55-65% lebar layar) */
+  .hero-photo-frame {
+    order: 3;
+    position: relative;
+    width: clamp(185px, 60vw, 230px);
+    margin: 0 auto 16px;
+    perspective: 1000px;
+  }
+
+  .hero-polaroid {
+    transform: rotate(2deg);
+    padding: 11px 11px 15px;
+  }
+
+  .hero-polaroid img {
+    height: clamp(170px, 50vw, 210px);
+  }
+
+  .photo-back {
+    inset: 10px -12px -7px 9px;
+  }
+
+  .hero-flower {
+    width: 46px;
+    height: 46px;
+    right: -14px;
+    bottom: -14px;
+  }
+
+  .hero-spark {
+    top: -16px;
+    right: -12px;
+    left: auto;
+    width: 30px;
+    height: 30px;
+  }
+
+  .photo-caption {
+    font-size: 19px;
+    margin: 8px 0 0;
+  }
+
+  /* Posisi 3: Kartu deskripsi biru */
   .bio-note {
-    padding: 20px;
-    margin: 24px 0 0;
+    order: 4;
+    width: min(100%, 350px);
+    padding: 18px 20px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    transform: rotate(-0.5deg);
   }
 
   .bio-note h2 {
     font-size: 14px;
+    margin: 0 0 10px;
   }
 
   .bio-note p {
     font-size: 13px;
   }
 
+  /* Posisi 4: Tombol Lihat CV + ikon sosial */
   .hero-links {
-    margin-top: 23px;
+    order: 5;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+    width: 100%;
   }
 
-  .hero-photo-area {
-    width: 254px;
-    margin: 0 auto 10px;
-  }
-
-  .hero-polaroid {
-    transform: rotate(2deg);
-  }
-
-  .hero-polaroid img {
-    height: 266px;
-  }
-
-  .hero-flower {
-    width: 57px;
-    height: 57px;
-    right: -18px;
-    bottom: -18px;
-  }
-
-  .hero-spark {
-    top: -20px;
-    right: -16px;
-    width: 36px;
-    height: 36px;
-  }
-
-  .photo-caption {
-    font-size: 22px;
-  }
-
+  /* Posisi 5: Teks tulisan tangan "sedikit logika, banyak kreativitas" di bawah tombol */
   .photo-annotation {
-    bottom: -47px;
+    order: 6;
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 14px auto 0;
+    transform: rotate(-3deg);
+    text-align: center;
     font-size: 20px;
+    width: 100%;
   }
 
   .ransom {
