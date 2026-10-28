@@ -61,6 +61,10 @@ export default function Page() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
@@ -84,6 +88,8 @@ export default function Page() {
                 end: 'top top',
                 pin: true,
                 pinSpacing: false,
+                anticipatePin: 1,
+                refreshPriority: 2,
                 invalidateOnRefresh: true,
               });
             }
@@ -99,24 +105,18 @@ export default function Page() {
                 end: 'bottom top',
                 pin: true,
                 pinSpacing: false,
+                anticipatePin: 1,
+                refreshPriority: 1,
                 invalidateOnRefresh: true,
               });
             }
+
+            ScrollTrigger.sort();
+            ScrollTrigger.refresh();
           }
         }
       );
     });
-
-    let ro: ResizeObserver | null = null;
-    if (typeof ResizeObserver !== 'undefined') {
-      ro = new ResizeObserver(() => {
-        ScrollTrigger.refresh();
-      });
-      const workEl = document.getElementById('work-wrapper');
-      const achEl = document.getElementById('achievements-wrapper');
-      if (workEl) ro.observe(workEl);
-      if (achEl) ro.observe(achEl);
-    }
 
     if (document.fonts) {
       document.fonts.ready.then(() => {
@@ -129,24 +129,14 @@ export default function Page() {
     };
     window.addEventListener('load', handleLoad);
 
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 600);
-
     return () => {
-      if (ro) ro.disconnect();
       window.removeEventListener('load', handleLoad);
-      clearTimeout(timer);
       ctx.revert();
     };
   }, []);
 
   useEffect(() => {
     ScrollTrigger.refresh();
-    const t = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 150);
-    return () => clearTimeout(t);
   }, [category, language]);
 
   return (
@@ -159,12 +149,12 @@ export default function Page() {
         </div>
       </div>
       <main>
-      <WorkSection
-        language={language}
-        category={category}
-        onCategoryChange={setCategory}
-        onOpenProject={openProject}
-      />
+        <WorkSection
+          language={language}
+          category={category}
+          onCategoryChange={setCategory}
+          onOpenProject={openProject}
+        />
         <AchievementsSection />
         <SkillsSection />
         <CertificatesSection language={language} />

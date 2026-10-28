@@ -226,6 +226,9 @@ export function AchievementsSection() {
                     <button
                       type="button"
                       className={`${styles.achievementFrame} ${tiltClass}`}
+                      style={{
+                        aspectRatio: a.width && a.height ? `${a.width} / ${a.height}` : '1.4',
+                      }}
                       onClick={e => openAchievement(a, e.currentTarget)}
                       aria-label={`Buka sertifikat: ${a.title}`}
                     >

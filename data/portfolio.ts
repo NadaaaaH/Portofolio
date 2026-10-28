@@ -128,16 +128,17 @@ const originalProjects: Project[] = [
     media: [
       {
         type: 'video',
-        publicId: 'tumbuhberbagi-siswa',
+        publicId: 'tumbuhberbagi-siswanew',
         autoplay: true,
         caption: {
           id: 'Halaman beranda bergaya binder notebook interaktif dengan tata letak scrapbook yang responsif dan navigasi bagian yang mulus.Menampilkan antarmuka siswa berbasis peran (role-based auth) yang dilengkapi alur verifikasi email otomatis saat pendaftaran awal untuk memastikan keamanan akun dan akses modul pembelajaran.',
           en: 'Demonstrates the student interface featuring role-based authentication and automated email verification during onboarding for secure access to practice modules.',
         },
+
       },
       {
         type: 'video',
-        publicId: 'tumbuhberbagi-admin',
+        publicId: 'tumbuhberbagi-adminnew',
         autoplay: true,
         caption: {
           id: 'Demonstrasi dashboard admin untuk mengelola bank soal, membuat jadwal ujian, dan menganalisis statistik tingkat kesulitan soal dengan visualisasi data Recharts. Dilengkapi WYSIWYG Rich Text Editor (Tiptap/Quill) serta fitur cetak/unduh laporan PDF hasil analisis secara otomatis.',
