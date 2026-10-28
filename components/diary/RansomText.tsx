@@ -107,8 +107,8 @@ export const HERO_NAME_COLOR_PATTERNS = {
   line2: HERO_NAME_PATTERNS.line2.map((p) => p.bg),
 };
 
-// Pola siklus default untuk teks ransom umum (misal judul section)
-const DEFAULT_TILE_CYCLE: RansomTilePattern[] = [
+// Pola siklus default untuk teks ransom umum (misal judul section di latar krem)
+export const DEFAULT_TILE_CYCLE: RansomTilePattern[] = [
   { bg: 'cream',       text: 'navy' },
   { bg: 'soft-blue',   text: 'navy' },
   { bg: 'cream',       text: 'denim' },
@@ -116,6 +116,56 @@ const DEFAULT_TILE_CYCLE: RansomTilePattern[] = [
   { bg: 'cream',       text: 'olive' },
   { bg: 'medium-blue', text: 'white' },
 ];
+
+/**
+ * Pola tile ransom khusus untuk judul section di atas background biru (var(--secondary)):
+ * Mencegah tile soft-blue menyatu dengan latar belakang section.
+ * - Section "My Work..." / "Karyaku...": tile soft-blue diubah jadi navy gelap dengan teks putih
+ *   (sama dengan huruf "i" pada "Haifa" di judul hero).
+ * - Section "Skill": huruf "k" diubah jadi medium-blue dengan teks putih
+ *   (sama dengan huruf "N" pada "Nada" di judul hero).
+ */
+export const SECTION_TITLE_PATTERNS: Record<string, RansomTilePattern[]> = {
+  // Section "Skill": huruf "k" (indeks 1) -> medium-blue dengan teks putih
+  Skill: [
+    { bg: 'cream',       text: 'navy' },  // S
+    { bg: 'medium-blue', text: 'white' }, // k (medium-blue dengan teks putih)
+    { bg: 'cream',       text: 'denim' }, // i
+    { bg: 'lime',        text: 'navy' },  // l
+    { bg: 'cream',       text: 'olive' }, // l
+  ],
+
+  // Section "My Work...": huruf 'k' (indeks 5) satu-satunya tile hitam/navy, 'y' (indeks 1) & '.' (indeks 7) jadi medium-blue
+  'My Work ...': [
+    { bg: 'cream',       text: 'navy' },  // M
+    { bg: 'medium-blue', text: 'white' }, // y (medium-blue dengan teks putih)
+    { bg: 'cream',       text: 'denim' }, // W
+    { bg: 'lime',        text: 'navy' },  // o
+    { bg: 'cream',       text: 'olive' }, // r
+    { bg: 'navy',        text: 'white' }, // k (satu-satunya tile hitam/navy dengan teks putih)
+    { bg: 'cream',       text: 'navy' },  // .
+    { bg: 'medium-blue', text: 'white' }, // . (medium-blue dengan teks putih)
+    { bg: 'cream',       text: 'denim' }, // .
+  ],
+
+  // Section "Karyaku...": huruf 'k' (indeks 5) satu-satunya tile hitam/navy, 'a' (indeks 1) & '.' (indeks 7) jadi medium-blue
+  'Karyaku ...': [
+    { bg: 'cream',       text: 'navy' },  // K
+    { bg: 'medium-blue', text: 'white' }, // a (medium-blue dengan teks putih)
+    { bg: 'cream',       text: 'denim' }, // r
+    { bg: 'lime',        text: 'navy' },  // y
+    { bg: 'cream',       text: 'olive' }, // a
+    { bg: 'navy',        text: 'white' }, // k (satu-satunya tile hitam/navy dengan teks putih)
+    { bg: 'cream',       text: 'navy' },  // u
+    { bg: 'medium-blue', text: 'white' }, // . (medium-blue dengan teks putih)
+    { bg: 'cream',       text: 'denim' }, // .
+    { bg: 'lime',        text: 'navy' },  // .
+  ],
+};
+
+// Dukung variasi tanpa spasi sebelum titik
+SECTION_TITLE_PATTERNS['My Work...'] = SECTION_TITLE_PATTERNS['My Work ...'];
+SECTION_TITLE_PATTERNS['Karyaku...'] = SECTION_TITLE_PATTERNS['Karyaku ...'];
 
 /**
  * Formula varian font dan rotasi bawaan (0 - 4).
@@ -158,11 +208,17 @@ export function RansomText({
     resolvedLines = [];
   }
 
+  // Cek apakah ada pola konfigurasi khusus judul section (misal: Skill, My Work..., Karyaku...)
+  const firstLine = (text || resolvedLines[0] || '').trim();
+  const sectionTitlePattern = !isHeroName && firstLine ? SECTION_TITLE_PATTERNS[firstLine] : undefined;
+
   // Tentukan pola per baris
   const resolvedPatterns: RansomTilePattern[][] =
     patterns ??
     (isHeroName
       ? [HERO_NAME_PATTERNS.line1, HERO_NAME_PATTERNS.line2]
+      : sectionTitlePattern
+      ? [sectionTitlePattern]
       : colorPatterns
       ? colorPatterns.map((line) =>
           line.map((bg) => ({

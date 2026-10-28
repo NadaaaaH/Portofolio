@@ -127,8 +127,9 @@ const originalProjects: Project[] = [
     previewLabels: ['Web Application Interface', 'Backend API & Database Flow'],
     media: [
       {
-        type: 'image',
-        publicId: 'Screenshot_2026-10-18_211137',
+        type: 'video',
+        publicId: 'tumbuhberbagi-siswa',
+        autoplay: true,
         caption: {
           id: 'Halaman beranda bergaya binder notebook interaktif dengan tata letak scrapbook yang responsif dan navigasi bagian yang mulus.Menampilkan antarmuka siswa berbasis peran (role-based auth) yang dilengkapi alur verifikasi email otomatis saat pendaftaran awal untuk memastikan keamanan akun dan akses modul pembelajaran.',
           en: 'Demonstrates the student interface featuring role-based authentication and automated email verification during onboarding for secure access to practice modules.',
@@ -381,15 +382,24 @@ export const achievements: Achievement[] = [
     height: 1240,
   },
 ];
-export const skills = [
-  { name: 'HTML & CSS', level: 'Advanced', icon: '\ud83c\udf10' },
-  { name: 'JavaScript / TypeScript', level: 'Advanced', icon: '\u26a1' },
-  { name: 'React & Next.js', level: 'Advanced', icon: '\u269b\ufe0f' },
-  { name: 'Tailwind CSS', level: 'Advanced', icon: '\ud83c\udfa8' },
-  { name: 'UI/UX Design', level: 'Proficient', icon: '\u270f\ufe0f' },
-  { name: 'Figma', level: 'Master', icon: '\ud83c\udfaf' },
-  { name: 'Node.js & Supabase', level: 'Intermediate', icon: '\ud83d\ude80' },
-  { name: 'Copywriting & Content', level: 'Proficient', icon: '\ud83d\udcdd' },
+export type SkillCategory = 'technology' | 'design' | 'writing' | 'soft skill' | string;
+
+export interface SkillItem {
+  name: string;
+  level: string;
+  icon?: string;
+  category: SkillCategory;
+}
+
+export const skills: SkillItem[] = [
+  { name: 'HTML & CSS', level: 'Advanced', icon: '\ud83c\udf10', category: 'technology' },
+  { name: 'JavaScript / TypeScript', level: 'Advanced', icon: '\u26a1', category: 'technology' },
+  { name: 'React & Next.js', level: 'Advanced', icon: '\u269b\ufe0f', category: 'technology' },
+  { name: 'Tailwind CSS', level: 'Advanced', icon: '\ud83c\udfa8', category: 'technology' },
+  { name: 'UI/UX Design', level: 'Proficient', icon: '\u270f\ufe0f', category: 'design' },
+  { name: 'Figma', level: 'Master', icon: '\ud83c\udfaf', category: 'design' },
+  { name: 'Node.js & Supabase', level: 'Intermediate', icon: '\ud83d\ude80', category: 'technology' },
+  { name: 'Copywriting & Content', level: 'Proficient', icon: '\ud83d\udcdd', category: 'writing' },
 ];
 export interface Certificate {
   id: number;

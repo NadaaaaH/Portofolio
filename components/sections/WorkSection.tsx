@@ -63,7 +63,7 @@ export function WorkSection({
       : [category];
 
   return (
-    <div className={styles.workWrapper}>
+    <div id="work-wrapper" className={styles.workWrapper}>
       <section id="work" className={`work-band ${styles.workBand}`}>
         <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
         <div className={`${styles.stickyHeader} ${isStuck ? styles.isStuck : ''}`}>
@@ -120,19 +120,14 @@ export function WorkSection({
               </div>
             </div>
             <div className="category-group">
-              <h3 className="category-subtitle">Other Projects</h3>
-              <div className="other-project-columns">
-                <div>
-                  <h4 className="category-subtitle">Creative Works</h4>
-                  <div className="project-grid other-project-grid">
-                    {creative.filter(p => p.id === 'creative-0' || p.id === 'creative-3').map(p => renderCard(p))}
-                  </div>
-                  <div className="more-row">
-                    <Button variant="link" onClick={() => onCategoryChange('Creative Works')}>
-                      {t.more}<ArrowUpRight />
-                    </Button>
-                  </div>
-                </div>
+              <h3 className="category-subtitle">Creative Works</h3>
+              <div className="project-grid">
+                {creative.filter(p => p.id === 'creative-0' || p.id === 'creative-3').map(p => renderCard(p))}
+              </div>
+              <div className="more-row">
+                <Button variant="link" onClick={() => onCategoryChange('Creative Works')}>
+                  {t.more}<ArrowUpRight />
+                </Button>
               </div>
             </div>
           </>

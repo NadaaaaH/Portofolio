@@ -246,9 +246,11 @@
   );
   position: relative;
   z-index: 10;
+  width: 100%;
   margin-top: -16px;
   filter: var(--torn-shadow);
   transform: translateZ(0);
+  will-change: transform;
 }
 
 .workBand {

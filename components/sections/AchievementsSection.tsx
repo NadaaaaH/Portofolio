@@ -7,7 +7,6 @@ import gsap from 'gsap';
 import { Flip } from 'gsap/Flip';
 import { achievements, type Achievement } from '@/data/portfolio';
 import { SectionTitle } from '@/components/diary/SectionTitle';
-import { TornPaperEdge } from '@/components/decorations';
 import { CloudinaryImage } from '@/components/img/MediaImage';
 import styles from './AchievementsSection.module.css';
 
@@ -200,12 +199,13 @@ export function AchievementsSection() {
   }, [activeAchievement, closeAchievement]);
 
   return (
-    <section
-      className={`achievement-band ${styles.achievementSection}`}
-      style={{ ['--max-card-height' as string]: `${maxCardHeight}px` }}
-    >
-      <TornPaperEdge />
-      <div className="page-inner">
+    <div id="achievements-wrapper" className={styles.achievementWrapper}>
+      <section
+        id="achievements"
+        className={`achievement-band ${styles.achievementSection}`}
+        style={{ ['--max-card-height' as string]: `${maxCardHeight}px` }}
+      >
+        <div className="page-inner">
         <SectionTitle text="Achievements" page="02" />
         <div className={styles.achievementsGrid} ref={gridRef}>
           {achievements.map((a, i) => {
@@ -294,6 +294,7 @@ export function AchievementsSection() {
           </div>,
           document.body
         )}
-    </section>
+      </section>
+    </div>
   );
 }

@@ -75,20 +75,48 @@ export default function Page() {
             reduceMotion: boolean;
           };
 
-          if (isDesktopOrTablet && !reduceMotion && heroRef.current) {
-            ScrollTrigger.create({
-              trigger: heroRef.current,
-              start: 'top top',
-              endTrigger: '#work',
-              end: 'top top',
-              pin: true,
-              pinSpacing: false,
-              invalidateOnRefresh: true,
-            });
+          if (isDesktopOrTablet && !reduceMotion) {
+            if (heroRef.current) {
+              ScrollTrigger.create({
+                trigger: heroRef.current,
+                start: 'top top',
+                endTrigger: '#work',
+                end: 'top top',
+                pin: true,
+                pinSpacing: false,
+                invalidateOnRefresh: true,
+              });
+            }
+
+            const workWrapper = document.getElementById('work-wrapper');
+            const achWrapper = document.getElementById('achievements-wrapper');
+
+            if (workWrapper && achWrapper) {
+              ScrollTrigger.create({
+                trigger: workWrapper,
+                start: 'bottom bottom',
+                endTrigger: achWrapper,
+                end: 'bottom top',
+                pin: true,
+                pinSpacing: false,
+                invalidateOnRefresh: true,
+              });
+            }
           }
         }
       );
     });
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => {
+        ScrollTrigger.refresh();
+      });
+      const workEl = document.getElementById('work-wrapper');
+      const achEl = document.getElementById('achievements-wrapper');
+      if (workEl) ro.observe(workEl);
+      if (achEl) ro.observe(achEl);
+    }
 
     if (document.fonts) {
       document.fonts.ready.then(() => {
@@ -106,6 +134,7 @@ export default function Page() {
     }, 600);
 
     return () => {
+      if (ro) ro.disconnect();
       window.removeEventListener('load', handleLoad);
       clearTimeout(timer);
       ctx.revert();
@@ -114,6 +143,10 @@ export default function Page() {
 
   useEffect(() => {
     ScrollTrigger.refresh();
+    const t = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 150);
+    return () => clearTimeout(t);
   }, [category, language]);
 
   return (

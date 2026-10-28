@@ -1,0 +1,129 @@
+.skillsSection {
+  position: relative;
+  z-index: 30;
+  background-color: var(--secondary);
+}
+
+.skillsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.rowWrapper {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  /* Ruang padding vertikal agar sudut kemiringan -1deg/2deg dan bayangan kartu tidak terpotong */
+  padding: 8px 4px;
+}
+
+.rowTrack {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: max-content;
+  will-change: transform;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+}
+
+.rowTrack:active {
+  cursor: grabbing;
+}
+
+.rowTrackStatic {
+  cursor: default;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.skillCard {
+  flex: 0 0 clamp(180px, 20vw, 220px);
+  width: clamp(180px, 20vw, 220px);
+  background: var(--card);
+  border-bottom: 3px solid var(--primary);
+  box-shadow: var(--paper-shadow);
+  border-radius: 2px;
+  padding: 10px 14px;
+  transform: rotate(-1deg);
+  transform-origin: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.skillCard:hover {
+  transform: rotate(-1deg) translateY(-2px);
+  box-shadow: 2px 6px 12px oklch(0.28 0.035 80 / 14%), 0 2px 4px oklch(0.28 0.035 80 / 8%);
+}
+
+.skillCardHighlight {
+  background: var(--primary) !important;
+  transform: rotate(2deg);
+}
+
+.skillCardHighlight:hover {
+  transform: rotate(2deg) translateY(-2px);
+}
+
+.skillHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.skillIcon {
+  color: var(--denim-ink);
+  flex-shrink: 0;
+}
+
+.skillName {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skillStars {
+  display: flex;
+  align-items: center;
+  gap: 2.5px;
+  margin-top: 6px;
+  color: var(--denim-ink);
+}
+
+.skillStars svg {
+  width: 11px;
+  height: 11px;
+}
+
+@media (max-width: 640px) {
+  .skillsContainer {
+    gap: 12px;
+  }
+
+  .rowWrapper {
+    padding: 6px 2px;
+  }
+
+  .skillCard {
+    flex: 0 0 170px;
+    width: 170px;
+    padding: 8px 12px;
+  }
+
+  .skillName {
+    font-size: 12px;
+  }
+}

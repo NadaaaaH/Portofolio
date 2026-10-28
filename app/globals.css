@@ -1436,16 +1436,20 @@
   flex-direction: column;
   gap: 16px;
   margin-bottom: 24px;
+  width: 100%;
 }
 
 .modal-description {
-  max-width: 70ch;
+  width: 100%;
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
 .modal-description p {
+  width: 100%;
+  max-width: none;
   font-size: 14.5px;
   line-height: 2;
   /* leading-8 */
@@ -2247,21 +2251,4 @@
     transform: rotate(8deg) scale(1) !important;
     transition: none !important;
   }
-}
-
-.other-project-columns {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 32px;
-}
-
-.other-project-grid {
-  grid-template-columns: 1fr;
-}
-
-@media(max-width:640px) {
-  .other-project-columns {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-}
+}
