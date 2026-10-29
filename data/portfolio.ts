@@ -1,4 +1,4 @@
-export type Language = 'id' | 'en';
+﻿export type Language = 'id' | 'en';
 export type Category = 'All' | 'Web Development' | 'UI/UX Design' | 'Creative Works';
 
 export type MultilingualText = { id: string; en: string } | string;
@@ -604,14 +604,33 @@ export interface SkillItem {
 }
 
 export const skills: SkillItem[] = [
-  { name: 'HTML & CSS', level: 'Advanced', icon: '\ud83c\udf10', category: 'technology' },
-  { name: 'JavaScript / TypeScript', level: 'Advanced', icon: '\u26a1', category: 'technology' },
-  { name: 'React & Next.js', level: 'Advanced', icon: '\u269b\ufe0f', category: 'technology' },
-  { name: 'Tailwind CSS', level: 'Advanced', icon: '\ud83c\udfa8', category: 'technology' },
-  { name: 'UI/UX Design', level: 'Proficient', icon: '\u270f\ufe0f', category: 'design' },
-  { name: 'Figma', level: 'Master', icon: '\ud83c\udfaf', category: 'design' },
-  { name: 'Node.js & Supabase', level: 'Intermediate', icon: '\ud83d\ude80', category: 'technology' },
-  { name: 'Copywriting & Content', level: 'Proficient', icon: '\ud83d\udcdd', category: 'writing' },
+  // ── Technology ──
+  { name: 'HTML & CSS', level: 'Advanced', icon: '🌐', category: 'technology' },
+  { name: 'JavaScript / TypeScript', level: 'Advanced', icon: '⚡', category: 'technology' },
+  { name: 'React & Next.js', level: 'Advanced', icon: '⚛️', category: 'technology' },
+  { name: 'Tailwind CSS', level: 'Advanced', icon: '🎨', category: 'technology' },
+  { name: 'Laravel & PHP', level: 'Advanced', icon: '🛠️', category: 'technology' },
+  { name: 'PostgreSQL & MySQL', level: 'Proficient', icon: '🗄️', category: 'technology' },
+  { name: 'Node.js & Supabase', level: 'Intermediate', icon: '🚀', category: 'technology' },
+  { name: 'REST API & Inertia.js', level: 'Proficient', icon: '🔗', category: 'technology' },
+  { name: 'GSAP & Framer Motion', level: 'Proficient', icon: '✨', category: 'technology' },
+  { name: 'Three.js', level: 'Intermediate', icon: '🧊', category: 'technology' },
+  { name: 'Docker & AWS EC2', level: 'Intermediate', icon: '🐳', category: 'technology' },
+  { name: 'AI / Gemini API', level: 'Proficient', icon: '🤖', category: 'technology' },
+  { name: 'Git & GitHub', level: 'Advanced', icon: '🐙', category: 'technology' },
+  // ── Design ──
+  { name: 'UI/UX Design', level: 'Proficient', icon: '✏️', category: 'design' },
+  { name: 'Figma', level: 'Master', icon: '🎯', category: 'design' },
+  { name: 'Graphic Design', level: 'Proficient', icon: '🖌️', category: 'design' },
+  { name: 'Photoshop & Canva', level: 'Proficient', icon: '🖼️', category: 'design' },
+  { name: 'Video Editing', level: 'Proficient', icon: '🎬', category: 'design' },
+  // ── Writing ──
+  { name: 'Copywriting & Content', level: 'Proficient', icon: '📝', category: 'writing' },
+  { name: 'Technical Writing', level: 'Intermediate', icon: '📄', category: 'writing' },
+  // ── Soft Skill ──
+  { name: 'System Analysis', level: 'Proficient', icon: '🔍', category: 'soft skill' },
+  { name: 'Problem Solving', level: 'Advanced', icon: '💡', category: 'soft skill' },
+  { name: 'Team Collaboration', level: 'Advanced', icon: '🤝', category: 'soft skill' },
 ];
 export interface Certificate {
   id: number;

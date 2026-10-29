@@ -47,6 +47,7 @@ export function ScrollReveal() {
     observeWithin(document);
 
     // Daftarkan elemen `.scroll-reveal` yang ditambahkan belakangan (re-render filter, dsb.)
+    // Batasi scope ke main/body langsung — hindari subtree lebar di seluruh document
     const mutationObserver = new MutationObserver((mutations) => {
       mutations.forEach((m) => {
         m.addedNodes.forEach((node) => {
@@ -54,7 +55,8 @@ export function ScrollReveal() {
         });
       });
     });
-    mutationObserver.observe(document.body, { childList: true, subtree: true });
+    const observeRoot = document.querySelector('main') ?? document.body;
+    mutationObserver.observe(observeRoot, { childList: true, subtree: true });
 
     return () => {
       mutationObserver.disconnect();

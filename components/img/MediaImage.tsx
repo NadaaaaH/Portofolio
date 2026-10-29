@@ -11,6 +11,7 @@ interface CloudinaryImageProps {
     onLoad?: React.ReactEventHandler<HTMLImageElement>;
     style?: React.CSSProperties;
     loading?: 'lazy' | 'eager';
+    fetchpriority?: 'high' | 'low' | 'auto';
     draggable?: boolean;
 }
 
@@ -36,6 +37,7 @@ export const CloudinaryImage: React.FC<CloudinaryImageProps> = ({
     onLoad,
     style,
     loading = 'lazy',
+    fetchpriority,
     draggable = false
 }) => {
     if (!publicId) return null;
@@ -49,6 +51,8 @@ export const CloudinaryImage: React.FC<CloudinaryImageProps> = ({
             className={className}
             loading={loading}
             decoding="async"
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            {...(fetchpriority ? { fetchpriority } as any : {})}
             onError={onError}
             onLoad={onLoad}
             style={style}

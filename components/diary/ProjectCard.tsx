@@ -70,6 +70,7 @@ export function ProjectCard({
               posterPublicId={preview.posterPublicId}
               autoplay={preview.autoplay}
               className="portfolio-shot"
+              width={640}
             />
           ) : (
             <CloudinaryImage

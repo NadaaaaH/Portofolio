@@ -58,6 +58,8 @@ export function HeroSection({ language }: HeroSectionProps) {
               publicId={copy.foto}
               alt="Nada Haifa Nurfadhilah"
               width={640}
+              loading="eager"
+              fetchpriority="high"
               onError={e => {
                 e.currentTarget.src = 'f.foto';
               }}
